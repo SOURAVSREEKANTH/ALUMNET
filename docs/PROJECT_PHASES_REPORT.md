@@ -1,14 +1,14 @@
 # AlumniConnect — Project Phases Report
 
 **Report date:** 22 October 2026
-**Reporting scope:** Initial workspace inspection through Phase 8 and the current Phase 9 administration foundation (Phase 6 camera check outstanding; Phase 7 verified)
+**Reporting scope:** Initial workspace inspection through Phase 9 administration (Phase 6 camera check outstanding; Phase 7 verified)
 **Project:** AlumniConnect, a PHP and MySQL college alumni-community portal
 
 ## 1. Executive summary
 
-AlumniConnect has progressed from an initial workspace into a working local application foundation. Phases 0–5 are complete; Phase 6 manual attendance is verified, with a supported-device camera scan outstanding; Phase 7 workflows and authorization checks are verified. Phase 8 event discussions, private moderated memory uploads, and in-app notifications are implemented. Phase 9 includes the read-only account audit, alumni verification decisions, photo moderation, and basic operational metrics; broader account/role moderation remains.
+AlumniConnect has progressed from an initial workspace into a working local application foundation. Phases 0–5 are complete; Phase 6 manual attendance is verified, with a supported-device camera scan outstanding; Phase 7 workflows and authorization checks are verified. Phase 8 event discussions, private moderated memory uploads, and in-app notifications are implemented. Phase 9 includes the read-only account audit, audited account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics. Broader content-report moderation remains outside the current scope.
 
-The project is currently a **local development prototype**, not a production-ready alumni service. Live camera scanning depends on a supported browser/device; manual code is verified as a fallback. Account suspension/role management, broad moderation, comprehensive quality review, and deployment readiness remain outstanding. Do not enter real community data until deployment, privacy, backup, and institutional verification requirements are addressed.
+The project is currently a **local development prototype**, not a production-ready alumni service. Live camera scanning depends on a supported browser/device; manual code is verified as a fallback. Broader content-report moderation, comprehensive quality review, and deployment readiness remain outstanding. Do not enter real community data until deployment, privacy, backup, and institutional verification requirements are addressed.
 
 ## 2. Project aim and objectives
 
@@ -198,7 +198,7 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 
 **Status:** Implemented for the current feature scope. Broader moderation/report workflows, automated regression tests, and full security/accessibility review remain in the later readiness work.
 
-### Phase 9 foundation — Account audit and operations (partial)
+### Phase 9 — Account audit and operations
 
 **Objective:** Give project administrators a safe way to confirm that user registration and profile data are being persisted without exposing authentication secrets.
 
@@ -216,7 +216,7 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 
 **Account-control verification:** A disposable admin/member browser workflow exercised role grant/removal and account suspension/reactivation. The audit page showed the changed account state and kept newly assigned alumni status pending. A state-changing POST without CSRF returned HTTP 403 without changing account state. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role. The account-audit page had no overflow at tested 360px and 1425px viewports. The read-only audit-log route returned HTTP 200 and omitted raw metadata. All QA records were removed afterward.
 
-**Status:** Partial administration foundation. Content-report moderation and richer analytics remain future work.
+**Status:** Implemented for the current prototype scope. Broader content-report moderation and richer analytics remain future work.
 
 ## 4. Product status at a glance
 
@@ -247,7 +247,7 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 ## 6. Remaining work and recommended next steps
 
 1. Run a live Phase 6 camera scan on supported browser/device hardware if available; manual entry, duplicate rejection, report totals, and responsive behavior are already verified.
-2. Complete Phase 9 with content-report moderation and richer analytics.
+2. Consider broader content-report moderation and richer analytics as future product scope.
 3. Run broader integration, security, accessibility, responsiveness, reliability, and performance checks; fix findings and record evidence.
 4. Prepare a private pilot deployment with HTTPS, production server configuration, secret management, backups/recovery, monitoring, and institution-approved privacy/verification practices before inviting real users.
 
@@ -255,4 +255,4 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 
 AlumniConnect has moved beyond a static concept page: it is a working local prototype with persisted identity, profile discovery, event registration/attendance, community workflows, event discussions, private moderated memories, notifications, account suspension/role controls, audit-log review, and basic administration. Its strongest foundations include role-aware access boundaries, privacy controls, transactional event handling, and the separation of RSVP data from actual attendance records.
 
-The project is **partially complete as a product**: Phases 0–5 are complete; Phase 6 core workflows are verified but a supported-device camera test remains open; Phase 7 is verified for its implemented scope; Phase 8 is implemented for its current scope; Phase 9 is partially implemented; and comprehensive quality/deployment readiness remain outstanding. It is suitable for continued local development and demonstration, but not public production use.
+The project is **partially complete as a product**: Phases 0–5 are complete; Phase 6 core workflows are verified but a supported-device camera test remains open; Phases 7–9 are implemented and verified for their stated scope; comprehensive quality/deployment readiness remain outstanding. It is suitable for continued local development and demonstration, but not public production use.

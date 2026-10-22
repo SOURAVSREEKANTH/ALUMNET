@@ -6,7 +6,7 @@ AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for 
 
 ## Project status
 
-**Phase 9 administration is in progress.** In addition to authentication, profiles, events, attendance, mentorship, and opportunities, members can discuss events, upload private JPEG/PNG memories for moderator review, and receive in-app notifications. Administrators can review alumni verification, moderate photos, inspect operational metrics, audit accounts and actions, suspend/reactivate accounts, and manage roles with self/last-admin safeguards. Broader content-report moderation, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [project phases report](./docs/PROJECT_PHASES_REPORT.md) and [task list](./TASKS.md) for current status.
+**Implemented for the current prototype scope:** authentication, profiles and directory, events and attendance, mentorship and opportunities, event discussions and memories, notifications, and administrator account/role controls, alumni verification, photo moderation, operational metrics, and audit history. Broader member content-report moderation, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [detailed project guide and file-by-file report](./docs/PROJECT_GUIDE_REPORT.md), [project phases report](./docs/PROJECT_PHASES_REPORT.md), and [task list](./TASKS.md) for details.
 
 ## Run locally
 
@@ -180,6 +180,7 @@ Use `run-local.ps1` in preference to the manual command when using the downloade
 ## Documentation
 
 - [PROJECT_GUIDE.md](./PROJECT_GUIDE.md) — project concepts and implementation approach
+- [docs/PROJECT_GUIDE_REPORT.md](./docs/PROJECT_GUIDE_REPORT.md) — detailed feature, architecture, file-by-file, setup, and readiness report
 - [docs/PROJECT_DESCRIPTION.md](./docs/PROJECT_DESCRIPTION.md) — detailed description of the project, current features, architecture, and roadmap
 - [TASKS.md](./TASKS.md) — roadmap and progress
 - [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) — system boundaries, routes, visual design, and feature dependencies

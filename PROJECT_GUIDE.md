@@ -1,50 +1,29 @@
 # AlumniConnect Project Guide
 
-## What we are building
+AlumniConnect is a PHP/MySQL alumni-community prototype for member profiles and discovery, events and attendance, mentorship, opportunities, event discussions, private memories, notifications, and administrative workflows.
 
-AlumniConnect is a college community portal for alumni, students, event organizers, and administrators. Its central workflows are finding people, joining events, recording real attendance, requesting mentorship, and sharing opportunities.
+## Current state
 
-The public experience can use editorial storytelling and restrained cinematic motion. Signed-in workflows should remain quick, accessible, and task-focused. Public animation must not be a prerequisite for understanding or using the application.
+The feature work is implemented for the current prototype scope. Live camera scanning on a supported device, broader content-report moderation, comprehensive quality review, and production deployment remain incomplete. This project is suitable for local development and demonstration, not public production use or real institutional data.
 
-## How a request works
+## Request flow
 
-Implemented routes use this request flow:
+```text
+Browser → public/index.php → Controller
+        → Service (workflow-specific rules/files)
+        → Repository (prepared SQL and transactions)
+        → MySQL → escaped PHP View → Browser
+```
 
-1. The browser requests a URL from the PHP front controller.
-2. Routing selects a controller action and HTTP method.
-3. Middleware checks the session, role, and CSRF token where applicable.
-4. The controller validates and normalizes input (authentication, profile, event creation, and RSVP routes are implemented).
-5. Services and repositories enforce authentication and event transition rules; registration and capacity-sensitive event changes write related records transactionally.
-6. Repositories use PDO prepared statements to read or write MySQL data.
-7. A view renders escaped HTML. JSON APIs are not implemented yet.
-
-Templates do not make authorization decisions. A hidden button is not a security boundary; the endpoint must independently check permissions.
+Controllers and repositories enforce authorization on the server. A hidden link or button is not an access-control boundary. State-changing forms use CSRF protection.
 
 ## Important concepts
 
-- **Identity vs. role:** A user account is separate from its assigned roles. A person may hold more than one role; changing roles is never an ordinary profile edit.
-- **Alumni verification:** Email verification shows control of an address, not proof of graduation. Graduation verification requires an administrator approval process.
-- **RSVP vs. attendance:** RSVP records a person's intent. A check-in records physical attendance. They are different records and must not be conflated in counts or reports.
-- **Capacity and waitlists:** A capacity-limited RSVP is serialized transactionally so concurrent requests cannot overbook. The waitlist is persisted in FIFO order, and releasing an attendee place promotes the next active member.
-- **QR passes:** A pass is unique to an event and confirmed attendee. Only a hash of the secret is stored; it expires at event end and is not an attendance record until an authorized organizer check-in succeeds.
-- **Privacy:** Directory visibility, contact sharing, and event-attendance visibility are separate decisions. Queries must apply the relevant privacy rules before returning identities.
-- **Rule-based suggestions:** Recommendations use disclosed matching criteria, such as shared department, skills, or stated preferences. They are not described as AI.
+- **Identity and roles:** Accounts are separate from assigned roles. Registration does not grant organizer or administrator access.
+- **Alumni verification:** New alumni are pending review. Control of an email address is not proof of graduation.
+- **RSVP and attendance:** RSVP records intent; attendance is recorded only after an authorized event check-in.
+- **Privacy:** Directory visibility and email sharing are distinct member choices. Private memory uploads stay outside the public document root and require authorized streaming.
+- **Suggestions:** Directory and meetup suggestions use explicit, explainable criteria; they are not described as AI.
+- **Administration:** Account changes and moderation decisions require server authorization and CSRF validation and are audited.
 
-## Learning path
-
-1. Understand the request flow and visual system.
-2. Set up configuration, the initial database schema, and PDO access.
-3. Implement sessions, authentication, CSRF checks, login throttling, and initial role-aware pages.
-4. Add editable profiles, directory search, privacy controls, and transparent suggestions.
-5. Publish events and implement transactional RSVPs and waitlists (implemented).
-6. Add passes, check-in, and attendance reports.
-7. Add mentorship, opportunities, and matching.
-8. Add discussion, memories, and notifications.
-9. Add organizer and administrator tools.
-10. Run integration, security, accessibility, and browser checks.
-
-See [TASKS.md](./TASKS.md) for phase status and [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for the planned module boundaries.
-
-## Current limitations
-
-The responsive public page, authentication, profiles, directory, and Phase 5–6 event publishing, RSVP, QR/manual check-in, and attendance report foundations are implemented. Phase 7 mentorship, opportunity listings, and preference-based event suggestions are in progress. Event publishing is restricted to organizer/admin roles; event tools are restricted to the event's organizer or an administrator. Current routes include `/`, `/login`, `/register`, `/logout`, `/dashboard`, `/profile`, `/directory`, `/events`, `/events/pass`, `/organizer/check-in`, `/organizer/report`, and `/community`. Check-in correction, profile detail pages, full role administration, and production deployment remain planned. Institution-specific department and graduation-year values must be provisioned in the database. The local runtime uses PHP's development server and a loopback-only MySQL instance; XAMPP/Apache is not required for development.
+For full feature descriptions, the current implementation map, file-by-file responsibilities, Windows setup, database notes, testing status, and limitations, see the [detailed project guide report](./docs/PROJECT_GUIDE_REPORT.md). See [TASKS.md](./TASKS.md) for progress, [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for component boundaries, and [README.md](./README.md) to run the application.
