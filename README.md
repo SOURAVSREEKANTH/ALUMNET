@@ -2,11 +2,11 @@
 
 **Your college. Your people. Your next chapter.**
 
-AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for a college Web Programming microproject. It includes the public landing page, authentication, member profiles and directory, events/attendance, mentorship and opportunities, event discussions, private moderated photo memories, notifications, and a partial administrator operations area.
+AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for a college Web Programming microproject. It includes the public landing page, authentication, member profiles and directory, events/attendance, mentorship and opportunities, event discussions, private moderated photo memories, notifications, and administrator operations.
 
 ## Project status
 
-**Implemented for the current prototype scope:** authentication, profiles and directory, events and attendance, mentorship and opportunities, event discussions and memories, notifications, and administrator account/role controls, alumni verification, photo moderation, operational metrics, and audit history. Broader member content-report moderation, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [detailed project guide and file-by-file report](./docs/PROJECT_GUIDE_REPORT.md), [project phases report](./docs/PROJECT_PHASES_REPORT.md), and [task list](./TASKS.md) for details.
+**Implemented for the current prototype scope:** authentication, profiles and directory, events and attendance, mentorship and opportunities, event discussions and memories, notifications, and administrator account/role controls, alumni verification, photo moderation, operational metrics, and audit history. A Railway demo deployment configuration and guide are prepared, but the app has not been deployed. Broader member content-report moderation and quality checks remain; do not use real member data. See the [detailed project guide](./docs/PROJECT_GUIDE_REPORT.md), [Railway deployment guide](./docs/RAILWAY_DEPLOYMENT.md), [project phases report](./docs/PROJECT_PHASES_REPORT.md), and [task list](./TASKS.md) for details.
 
 ## Run locally
 
@@ -181,6 +181,7 @@ Use `run-local.ps1` in preference to the manual command when using the downloade
 
 - [PROJECT_GUIDE.md](./PROJECT_GUIDE.md) — project concepts and implementation approach
 - [docs/PROJECT_GUIDE_REPORT.md](./docs/PROJECT_GUIDE_REPORT.md) — detailed feature, architecture, file-by-file, setup, and readiness report
+- [docs/RAILWAY_DEPLOYMENT.md](./docs/RAILWAY_DEPLOYMENT.md) — demo deployment configuration, database initialization, and volume setup for Railway
 - [docs/PROJECT_DESCRIPTION.md](./docs/PROJECT_DESCRIPTION.md) — detailed description of the project, current features, architecture, and roadmap
 - [TASKS.md](./TASKS.md) — roadmap and progress
 - [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) — system boundaries, routes, visual design, and feature dependencies

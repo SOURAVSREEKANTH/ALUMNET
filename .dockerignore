@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+.env
+.env.*
+!.env.example
+config/local.php
+config/*.local.php
+storage/uploads/*
+storage/memories/*
+storage/logs/*
+storage/cache/*
+vendor
+*.log

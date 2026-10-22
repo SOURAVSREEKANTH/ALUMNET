@@ -19,7 +19,7 @@ Phase 6 manual check-in, duplicate rejection, report totals, and responsive chec
 - [x] Phase 8 — Implement event discussions, private moderated Memory Lane uploads, and notifications; browser/database workflows verified for current scope.
 - [x] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics for the current prototype scope; account audit/log, suspension/role controls, alumni decisions, photo moderation, and basic operational metrics are implemented. Broader content-report moderation remains future work.
 - [ ] Phase 10 — Run integration, security, accessibility, responsiveness, and performance checks.
-- [ ] Phase 11 — Finalize setup and learning documentation, demo workflow, and presentation material.
+- [ ] Phase 11 — Finalize the demo workflow and presentation material; Railway Docker deployment configuration and setup documentation are prepared, but no hosted deployment has been created.
 
 ## Phase 1 review checklist
 
@@ -39,4 +39,4 @@ Phase 6 manual check-in, duplicate rejection, report totals, and responsive chec
 
 ## Verification notes
 
-Phases 2–9 checks are recorded in `docs/TESTING.md`; the cumulative status is in `docs/PROJECT_PHASES_REPORT.md`. Phase 6 still needs a supported-device camera scan. Phase 10 quality review and Phase 11 pilot/deployment preparation remain. The current app remains a local development prototype, not a production-ready portal.
+Phases 2–9 checks are recorded in `docs/TESTING.md`; the cumulative status is in `docs/PROJECT_PHASES_REPORT.md`. Phase 6 still needs a supported-device camera scan. Phase 10 quality review and a hosted demo launch/presentation preparation remain. Railway deployment configuration is prepared in `docs/RAILWAY_DEPLOYMENT.md`; the app has not been deployed and is not production-ready.

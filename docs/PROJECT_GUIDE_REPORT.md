@@ -7,7 +7,7 @@
 
 AlumniConnect is a PHP and MySQL web application for a college community. It brings student and alumni profiles, discovery, events, attendance, mentorship, opportunities, event memories, and basic administration into one authenticated portal.
 
-The project is a **working local prototype**. The PHP application and MySQL database run on the developer's computer; the local setup is not a hosted service and must not be treated as production-ready. Most core feature flows are implemented. Remaining work includes the supported-device camera scan, broad content-report moderation, comprehensive accessibility/security/performance checks, and pilot deployment preparation.
+The project is a **working prototype**. The PHP application and MySQL database have been exercised locally. Railway Docker deployment files and setup instructions are prepared, but no hosted service has been created or deployed. Do not treat it as production-ready or enter real member data. Most core feature flows are implemented. Remaining work includes the supported-device camera scan, broad content-report moderation, comprehensive accessibility/security/performance checks, and deployment verification.
 
 The code uses a deliberately small architecture:
 
@@ -112,6 +112,11 @@ The tables below cover the application source, database scripts, runtime assets,
 | `.gitignore` | Excludes local secrets, runtime/private uploads, and generated files | Keeps personal configuration and uploaded memories out of source control |
 | `run-mysql-local.ps1` | Starts the isolated MySQL server on loopback port 3307 | Opens/uses the local database data directory; run in its own PowerShell window |
 | `run-local.ps1` | Validates PHP/PDO MySQL and starts the PHP development server on 127.0.0.1:8000 | Serves only `public/`; run in a second PowerShell window |
+| `Dockerfile` | Builds the hosted demo container with PHP 8.5, Apache, and PDO MySQL | Railway detects this root Dockerfile; it serves `public/` and listens on Railway's assigned port |
+| `.dockerignore` | Excludes local credentials, private uploads, logs, and Git metadata from the container build context | Prevents accidental inclusion of local-only or private files in the demo image |
+| `docker/apache-site.conf` | Configures Apache's document root as `public/` and enables front-controller rewrites | Used only by the Docker deployment |
+| `docker/php.ini` | Sets upload size and safer PHP session defaults for the demo container | Loaded by the Docker PHP runtime |
+| `docker/railway-entrypoint.sh` | Configures Apache to listen on Railway's runtime port and prepares private storage permissions | Container startup script; private photo storage remains under `storage/memories` |
 | `config/config.example.php` | Safe placeholder database/application configuration | Documents config keys without embedding real credentials |
 | `config/load.php` | Merges example defaults, ignored local configuration, and environment overrides | Shared configuration entry point used by the application and connection layer |
 | `config/local.php` | Generated local database credentials, app key, and cookie setting | Private local file; ignored by Git. Do not publish, paste, or commit it |
@@ -211,6 +216,7 @@ Templates escape user-controlled output. They improve usability, but authorizati
 |---|---|---|
 | `database/schema.sql` | Complete current schema for a fresh installation | Applied by `database/setup-local.php` |
 | `database/setup-local.php` | Creates a new database, applies schema, creates a scoped application account, and writes ignored local config | First-time setup only; refuses to overwrite existing database/config resources |
+| `database/deploy-schema.php` | CLI-only initial schema setup for a hosted database | Used once as a Railway pre-deploy command on a new, empty database; refuses to run when any table exists |
 | `database/seed-demo.php` | Creates/updates local demo roles/accounts with randomly generated passwords | Optional local demonstration; password reset prints new credentials |
 | `database/migrate-phase4.php` | Applies profile-table migration/backfill | Existing databases that predate profile feature |
 | `database/migrate-phase5.php` | Applies event, RSVP, and waitlist tables | Existing databases that predate event feature |
@@ -232,6 +238,7 @@ Migrations are for upgrading an older database. Do not blindly run setup against
 | File | Purpose |
 |---|---|
 | `docs/PROJECT_GUIDE_REPORT.md` | This comprehensive report: feature guide, architecture connections, file map, setup, and limitations |
+| `docs/RAILWAY_DEPLOYMENT.md` | Railway demo setup, environment variables, one-time schema initialization, and persistent private photo volume |
 | `docs/PROJECT_DESCRIPTION.md` | Product purpose, users, feature details, routes, architecture, and security/privacy notes |
 | `docs/PROJECT_PHASES_REPORT.md` | Historical phase-by-phase work and verification record |
 | `docs/ARCHITECTURE.md` | Boundaries, route map, data flow, design principles, and roadmap dependencies |
@@ -341,4 +348,3 @@ The project is suitable for **local development and demonstration**. It is not r
 5. [docs/DATABASE.md](./DATABASE.md) — data relationships and invariants.
 6. [docs/TESTING.md](./TESTING.md) — evidence and remaining tests.
 7. [TASKS.md](../TASKS.md) and [docs/PROJECT_PHASES_REPORT.md](./PROJECT_PHASES_REPORT.md) — roadmap and historical work.
-

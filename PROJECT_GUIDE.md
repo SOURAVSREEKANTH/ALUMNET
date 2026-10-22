@@ -4,7 +4,7 @@ AlumniConnect is a PHP/MySQL alumni-community prototype for member profiles and 
 
 ## Current state
 
-The feature work is implemented for the current prototype scope. Live camera scanning on a supported device, broader content-report moderation, comprehensive quality review, and production deployment remain incomplete. This project is suitable for local development and demonstration, not public production use or real institutional data.
+The feature work is implemented for the current prototype scope. Railway Docker deployment files and a setup guide are prepared, but the app has not been published. Live camera scanning on a supported device, broader content-report moderation, comprehensive quality review, and production deployment remain incomplete. This project is suitable for local development and a synthetic-data demonstration, not real institutional data.
 
 ## Request flow
 
@@ -26,4 +26,4 @@ Controllers and repositories enforce authorization on the server. A hidden link 
 - **Suggestions:** Directory and meetup suggestions use explicit, explainable criteria; they are not described as AI.
 - **Administration:** Account changes and moderation decisions require server authorization and CSRF validation and are audited.
 
-For full feature descriptions, the current implementation map, file-by-file responsibilities, Windows setup, database notes, testing status, and limitations, see the [detailed project guide report](./docs/PROJECT_GUIDE_REPORT.md). See [TASKS.md](./TASKS.md) for progress, [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for component boundaries, and [README.md](./README.md) to run the application.
+For full feature descriptions, the current implementation map, file-by-file responsibilities, Windows setup, database notes, testing status, and limitations, see the [detailed project guide report](./docs/PROJECT_GUIDE_REPORT.md). For a public demo setup, see the [Railway deployment guide](./docs/RAILWAY_DEPLOYMENT.md). See [TASKS.md](./TASKS.md) for progress, [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for component boundaries, and [README.md](./README.md) to run the application.
