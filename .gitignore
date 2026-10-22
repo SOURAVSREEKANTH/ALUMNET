@@ -1,0 +1,10 @@
+/config/local.php
+/config/*.local.php
+/.env
+/.env.*
+!/.env.example
+/storage/uploads/*
+/storage/logs/*
+/storage/cache/*
+/vendor/
+*.log
