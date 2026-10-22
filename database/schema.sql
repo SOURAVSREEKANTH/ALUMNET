@@ -50,6 +50,16 @@ CREATE TABLE IF NOT EXISTS departments (
     UNIQUE KEY uq_departments_slug (slug)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO departments (name, slug)
+VALUES
+    ('Artificial Intelligence and Data Science (AI & DS)', 'artificial-intelligence-and-data-science'),
+    ('Civil Engineering', 'civil-engineering'),
+    ('Computer Science and Engineering (CSE)', 'computer-science-and-engineering'),
+    ('Electrical and Electronics Engineering (EEE)', 'electrical-and-electronics-engineering'),
+    ('Electronics and Communication Engineering (ECE)', 'electronics-and-communication-engineering'),
+    ('Mechanical Engineering', 'mechanical-engineering')
+ON DUPLICATE KEY UPDATE name = VALUES(name);
+
 CREATE TABLE IF NOT EXISTS graduation_batches (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     department_id BIGINT UNSIGNED NOT NULL,

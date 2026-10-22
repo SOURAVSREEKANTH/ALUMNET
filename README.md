@@ -148,9 +148,24 @@ Uploaded event memories are limited to JPEG/PNG images no larger than 2 MB and a
 
 The member's event pass displays a locally generated QR code; organizers can scan it with a supported browser/device camera or enter the code manually. `public\assets\js\vendor\qrcode.min.js` is a locally vendored, MIT-licensed QR encoder (license included next to the file). No external service receives pass codes.
 
-For another PHP runtime, enable its PDO MySQL extension as above or run the migration with its PHP executable and `PDO_MYSQL` enabled. Fresh databases created from the updated `database/schema.sql` already include the table; running the migration remains safe and backfills any older accounts. Department and graduation-year choices are institution-specific and must be added to `departments` and `graduation_batches`; the app intentionally does not invent college catalog entries.
+For another PHP runtime, enable its PDO MySQL extension as above or run the migration with its PHP executable and `PDO_MYSQL` enabled. Fresh databases created from the updated `database/schema.sql` already include the standard department catalog. Graduation-year choices remain institution-specific and must be added to `graduation_batches`.
 
-For example, after replacing these sample values with the institution's approved catalog, add a department and its graduation year with SQL:
+Phase 10 seeds the directory/profile department list with Computer Science and Engineering (CSE), Electrical and Electronics Engineering (EEE), Electronics and Communication Engineering (ECE), Mechanical Engineering, Artificial Intelligence and Data Science (AI & DS), and Civil Engineering. The department names are configurable reference data. If the institution uses different official names or has more departments, update the catalog before inviting real members.
+
+For an existing database, run the Phase 10 catalog migration once using the database administrator connection variables described above:
+
+```powershell
+$env:MYSQL_ADMIN_HOST = "127.0.0.1"
+$env:MYSQL_ADMIN_PORT = "3307"
+$env:MYSQL_ADMIN_USER = "root"
+# Set MYSQL_ADMIN_PASSWORD only if your local database administrator has a password.
+$php = Join-Path $env:LOCALAPPDATA "AlumniConnect\php-8.5.11\php.exe"
+$ext = Join-Path (Split-Path $php) "ext"
+$phpArgs = @("-d", "extension_dir=$ext", "-d", "extension=php_pdo_mysql.dll")
+& $php @phpArgs .\database\migrate-phase10.php
+```
+
+The migration is repeatable and retains existing departments and profile references. For example, if your institution has an additional department, add it with SQL:
 
 ```sql
 INSERT INTO departments (name, slug) VALUES ('Your Department', 'your-department');

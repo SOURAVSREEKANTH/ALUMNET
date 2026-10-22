@@ -224,12 +224,14 @@ Templates escape user-controlled output. They improve usability, but authorizati
 | `database/migrate-phase7.php` | Applies mentor, request, opportunity, and event-preference tables | Existing databases that predate community features |
 | `database/migrate-phase8.php` | Applies discussions, photo albums/photos, and initial notification tables | Existing databases that predate community content |
 | `database/migrate-phase9.php` | Extends notification enum values for later moderation/review notices | Databases that already have Phase 8 notification table but lack Phase 9 types |
+| `database/migrate-phase10.php` | Adds the standard department catalog used by profile and directory dropdowns | Existing databases; repeatable and preserves profile references |
 | `database/migrations/phase4-member-profiles.sql` | Phase 4 schema and backfill SQL | Used by phase 4 runner |
 | `database/migrations/phase5-events.sql` | Phase 5 event/RSVP/waitlist SQL | Used by phase 5 runner |
 | `database/migrations/phase6-attendance.sql` | Phase 6 pass/check-in SQL | Used by phase 6 runner |
 | `database/migrations/phase7-community.sql` | Phase 7 mentorship/opportunity/preference SQL | Used by phase 7 runner |
 | `database/migrations/phase8-community-content.sql` | Phase 8 discussion/photo/notification SQL | Used by phase 8 runner |
 | `database/migrations/phase9-admin-operations.sql` | Phase 9 notification type update | Used by phase 9 runner |
+| `database/migrations/phase10-departments.sql` | CSE, EEE, ECE, Mechanical, AI & DS, and Civil Engineering department catalog | Used by phase 10 runner |
 
 Migrations are for upgrading an older database. Do not blindly run setup against the existing project database. Run schema migrations as an authorized local MySQL administrator; the normal `alumni_app` account is intentionally not granted schema-administration permissions. Take a verified backup before migrating any database that contains data you need.
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-The identity/authentication, member-profile, event/RSVP, attendance, Phase 7 mentorship/opportunity/meetup-preference, and Phase 8 discussion/photo/notification schemas are implemented in `database/schema.sql` and maintained in repeatable migrations. Phase 9 extends notification types for alumni review and photo moderation. The Phase 4 `member_profiles` table stores profile information for all account types; `alumni_profiles` retains alumni verification state. Department and graduation-batch records are institution-specific and must be provisioned with real values. Broader moderation-report tables remain a design proposal.
+The identity/authentication, member-profile, event/RSVP, attendance, Phase 7 mentorship/opportunity/meetup-preference, and Phase 8 discussion/photo/notification schemas are implemented in `database/schema.sql` and maintained in repeatable migrations. Phase 9 extends notification types for alumni review and photo moderation. Phase 10 seeds a starter department catalog: CSE, EEE, ECE, Mechanical Engineering, AI & DS, and Civil Engineering. Institutions should confirm these names and add any missing departments. The Phase 4 `member_profiles` table stores profile information for all account types; `alumni_profiles` retains alumni verification state. Graduation-batch records remain institution-specific and must be provisioned. Broader moderation-report tables remain a design proposal.
 
 Use InnoDB, `utf8mb4`, foreign keys, explicit indexes for common filters, and UTC timestamps. The initial SQL uses these conventions. Use integer primary keys unless a feature has a justified public-token requirement. Prefer soft-state fields for moderation and lifecycle history over destructive deletion of records needed for audit.
 
