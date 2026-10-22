@@ -16,7 +16,7 @@ Status: In progress. Phase 7 schema, migration, repository, controller, views, r
 - [ ] Phase 6 — Implement QR/manual check-in, attendance records, and attendance metrics; complete live browser/camera and responsive checks.
 - [ ] Phase 7 — Implement verified-alumni mentorship, opportunity listings, and transparent preference-based meetup suggestions.
 - [ ] Phase 8 — Implement event discussions, Memory Lane uploads, and notifications.
-- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics.
+- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics (read-only account audit added; remaining workflows open).
 - [ ] Phase 10 — Run integration, security, accessibility, responsiveness, and performance checks.
 - [ ] Phase 11 — Finalize setup and learning documentation, demo workflow, and presentation material.
 

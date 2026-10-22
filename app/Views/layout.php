@@ -50,6 +50,9 @@ $flashes = $flashes ?? [];
                 <a href="/directory">Directory</a>
                 <a href="/events">Events</a>
                 <a href="/community">Community</a>
+                <?php if (\AlumniConnect\Security\Auth::hasRole($currentUser, 'admin')): ?>
+                    <a href="/admin/users">Account audit</a>
+                <?php endif; ?>
                 <a href="/profile">My profile</a>
                 <form class="nav-logout" action="/logout" method="post">
                     <input type="hidden" name="_csrf" value="<?= \AlumniConnect\Support\View::escape(\AlumniConnect\Security\Csrf::token()) ?>">

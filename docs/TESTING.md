@@ -83,6 +83,13 @@ Record only checks actually executed:
 - Temporary Phase 7 user accounts, event, opportunity, mentorship profile/request, preference, audit, and login-attempt fixtures were deleted. Database counts returned to 4 users and zero events, mentor profiles, mentorship requests, opportunities, and preferences.
 - Mentor decision and opportunity publishing/closing forms, authenticated CSRF rejection and role-denial HTTP behavior, and saved visual screenshots have not yet been verified end to end in the browser. The anonymous redirect and route-method checks above do not substitute for those authenticated checks.
 
+### Administrator account audit
+
+- Added a read-only `/admin/users` page restricted to the `admin` role. It displays account identity, roles, account status, registration/last-login timestamps, profile completion, and selected profile fields; the query does not select password hashes.
+- The MySQL audit query ran successfully against the local database, returned five accounts, and confirmed `password_hash` is not included in the result.
+- Browser verification with a disposable admin account showed the account list and confirmed password hashes were not displayed. A signed-in student received HTTP 403 for the route; an unauthenticated request redirected to `/login` with HTTP 303.
+- Both temporary test accounts were removed; the local database returned to five accounts. Responsive-width inspection of this new page still needs to be recorded.
+
 ## Planned test layers
 
 ### Static and unit checks

@@ -71,6 +71,7 @@ The database contains these four role types. Public registration currently permi
 
 - All account types can edit a member profile with a display name, department/graduation year, headline, job title, company, biography, visibility, and optional email sharing.
 - The authenticated directory supports text search, department and year filters, and pagination. Private profiles are excluded; email appears only when the member opts in.
+- Administrators can review account creation, assigned roles, sign-in times, alumni verification state, and selected profile fields in the read-only `/admin/users` audit page. Passwords and password hashes are never displayed.
 - Directory suggestions are ordered by shared department and graduating year, with the matching reason displayed rather than an opaque score.
 - Pending/rejected alumni verification is shown separately from the alumni role; a visible profile is not presented as proof of graduation.
 
@@ -159,6 +160,7 @@ The current request path is:
 | GET | `/profile` | View and edit the signed-in member's profile |
 | POST | `/profile` | Validate and save the signed-in member's profile |
 | GET | `/directory` | Search/filter visible profiles; requires sign-in |
+| GET | `/admin/users` | Search and review registered accounts; administrator only |
 | GET | `/events` | Browse upcoming published events; requires sign-in |
 | POST | `/events/create` | Publish an event; organizer/admin and CSRF checks required |
 | POST | `/events/rsvp` | Attend, express interest, join waitlist, or cancel; requires sign-in and CSRF |
@@ -174,7 +176,7 @@ The current request path is:
 | POST | `/opportunities/close` | Close a listing; publisher/admin and CSRF checks required |
 | POST | `/community/preferences` | Save venue/date preferences for event suggestions; requires sign-in and CSRF |
 
-Notifications, opportunity moderation, and broader administrative routes are not implemented yet.
+Notifications, opportunity moderation, alumni verification decisions, and broader administrative routes are not implemented yet.
 
 ## 8. Database and data storage
 
@@ -231,7 +233,7 @@ Important limits:
 - Local development uses HTTP and disables the secure-cookie flag; use HTTPS and secure cookies for deployment.
 - The built-in PHP server is for development only.
 - There is no email delivery or email verification workflow yet.
-- Alumni graduation verification and administrative review tools are not implemented.
+- Alumni graduation verification decisions are not implemented. The administrator account audit reports verification state without changing it.
 - The demo database is local and has no production backup, monitoring, or recovery procedure.
 - Event publication is organizer/admin-only, and event publishing and RSVP forms have CSRF protection. Event edit/cancel controls and attendee notifications have not been implemented.
 - Future check-in, upload, and administrative features must implement their own authorization, privacy enforcement, validation, and audit behavior.
@@ -254,4 +256,4 @@ The implemented foundation has been checked with PHP syntax validation, JavaScri
 
 ## 11. Summary
 
-AlumniConnect is currently a working local prototype foundation: it introduces the product through a responsive public page, supports database-backed accounts, provides member profile and directory workflows with privacy controls, and supports event publishing, RSVPs, waitlists, check-in, and aggregate attendance reports. Phase 7 mentorship, opportunity, and preference-based meetup workflows are in progress; broader community and administration features remain future phases. The current MySQL data is stored locally on the development computer, not in the cloud.
+AlumniConnect is currently a working local prototype foundation: it introduces the product through a responsive public page, supports database-backed accounts, provides member profile and directory workflows with privacy controls, supports event publishing, RSVPs, waitlists, check-in, and aggregate attendance reports, and includes a read-only administrator account audit. Phase 7 mentorship, opportunity, and preference-based meetup workflows are in progress; broader community and administration features remain future phases. The current MySQL data is stored locally on the development computer, not in the cloud.

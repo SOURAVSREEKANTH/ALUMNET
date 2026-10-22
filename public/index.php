@@ -5,6 +5,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 use AlumniConnect\Controllers\AuthController;
+use AlumniConnect\Controllers\AdminController;
 use AlumniConnect\Controllers\CommunityController;
 use AlumniConnect\Controllers\EventController;
 use AlumniConnect\Controllers\PageController;
@@ -26,6 +27,7 @@ $pages = new PageController();
 $events = new EventController();
 $profiles = new ProfileController();
 $community = new CommunityController();
+$admin = new AdminController();
 $authentication = null;
 $routes = [
     'GET' => [
@@ -35,6 +37,7 @@ $routes = [
         '/directory' => [$profiles, 'directory'],
         '/events' => [$events, 'index'],
         '/community' => [$community, 'index'],
+        '/admin/users' => [$admin, 'users'],
         '/organizer/check-in' => [$events, 'checkInPage'],
         '/organizer/report' => [$events, 'report'],
         '/login' => [static function () use (&$authentication): void {

@@ -1041,7 +1041,8 @@ button:focus-visible {
 }
 
 .profile-section,
-.directory-section {
+.directory-section,
+.admin-audit-section {
     min-height: 70vh;
     background: var(--ink);
 }
@@ -1053,7 +1054,9 @@ button:focus-visible {
 .directory-results-heading,
 .member-grid,
 .directory-empty,
-.directory-pagination {
+.directory-pagination,
+.admin-audit-filters,
+.admin-audit-table-wrap {
     max-width: 86rem;
     margin-right: auto;
     margin-left: auto;
@@ -1229,6 +1232,73 @@ button:focus-visible {
     padding: 1.5rem;
     border: 1px solid var(--line-dark);
     background: #202324;
+}
+
+.admin-audit-table-wrap {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+}
+
+.admin-audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-audit-table th,
+.admin-audit-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+
+.admin-audit-table th {
+    color: var(--paper-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.admin-audit-table td {
+    min-width: 9rem;
+    color: var(--paper-muted);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.admin-audit-table td:first-child {
+    min-width: 13rem;
+}
+
+.admin-audit-table td strong,
+.admin-audit-table td span,
+.admin-audit-table td small {
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.admin-audit-table td strong {
+    color: var(--paper);
+    font-size: 0.9rem;
+}
+
+.admin-audit-table td small {
+    color: var(--amber);
+    font-size: 0.7rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .directory-filters .field-group > label {
@@ -2426,6 +2496,56 @@ button:focus-visible {
     .directory-filters {
         grid-template-columns: 1fr;
         padding: 1rem;
+    }
+
+    .admin-audit-table-wrap {
+        overflow: visible;
+        border: 0;
+        background: transparent;
+    }
+
+    .admin-audit-table,
+    .admin-audit-table tbody,
+    .admin-audit-table tr,
+    .admin-audit-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-audit-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+
+    .admin-audit-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--line);
+        background: var(--surface);
+    }
+
+    .admin-audit-table td,
+    .admin-audit-table td:first-child {
+        min-width: 0;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .admin-audit-table td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--amber);
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .admin-audit-table tr td:last-child {
+        border-bottom: 0;
     }
 
     .directory-results-heading {
