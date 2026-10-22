@@ -27,6 +27,7 @@ if (menuButton && navigation) {
     const closeMenu = () => {
         menuButton.setAttribute("aria-expanded", "false");
         navigation.classList.remove("is-open");
+        navigation.querySelectorAll("details[open]").forEach((group) => group.removeAttribute("open"));
     };
 
     menuButton.addEventListener("click", () => {
@@ -37,7 +38,30 @@ if (menuButton && navigation) {
 
     navigation.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeMenu();
+        if (event.key !== "Escape") return;
+
+        if (menuButton.getAttribute("aria-expanded") === "true") {
+            closeMenu();
+            menuButton.focus();
+            return;
+        }
+
+        const openGroup = navigation.querySelector("details[open]");
+        if (openGroup) {
+            const summary = openGroup.querySelector("summary");
+            openGroup.removeAttribute("open");
+            summary?.focus();
+        }
+    });
+
+    document.addEventListener("click", (event) => {
+        if (menuButton.getAttribute("aria-expanded") === "true"
+            && event.target instanceof Node
+            && !navigation.contains(event.target)
+            && !menuButton.contains(event.target)
+        ) {
+            closeMenu();
+        }
     });
 }
 

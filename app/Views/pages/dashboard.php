@@ -25,13 +25,46 @@
         <?php endif; ?>
     </div>
     <div class="dashboard-next">
-        <p class="section-label"><span>01</span> Building the network</p>
-        <h2>Make your profile yours.</h2>
-        <p>Add a short introduction and choose how your profile appears to other signed-in members. Search the member directory using names, professional details, departments, or graduating years.</p>
-        <div class="dashboard-actions">
-            <a class="text-link" href="/profile">Edit your profile <span aria-hidden="true">↗</span></a>
-            <a class="text-link" href="/directory">Explore the directory <span aria-hidden="true">↗</span></a>
-            <a class="text-link" href="/events">Find an event <span aria-hidden="true">↗</span></a>
+        <p class="section-label"><span>01</span> Your shortcuts</p>
+        <h2>Where would you like to go?</h2>
+        <div class="dashboard-links">
+            <a class="dashboard-link-card" href="/profile">
+                <span class="dashboard-link-number">01</span>
+                <span class="dashboard-link-copy"><strong>My profile</strong><span>Update your details and privacy settings.</span></span>
+                <span class="dashboard-link-action">Open profile</span>
+            </a>
+            <a class="dashboard-link-card" href="/directory">
+                <span class="dashboard-link-number">02</span>
+                <span class="dashboard-link-copy"><strong>Member directory</strong><span>Find alumni and students by name, work, or class.</span></span>
+                <span class="dashboard-link-action">Browse members</span>
+            </a>
+            <a class="dashboard-link-card" href="/events">
+                <span class="dashboard-link-number">03</span>
+                <span class="dashboard-link-copy"><strong>Events</strong><span>Discover events and manage your RSVPs.</span></span>
+                <span class="dashboard-link-action">View events</span>
+            </a>
+            <a class="dashboard-link-card" href="/community">
+                <span class="dashboard-link-number">04</span>
+                <span class="dashboard-link-copy"><strong>Community</strong><span>Explore mentorship, opportunities, and meetups.</span></span>
+                <span class="dashboard-link-action">Explore community</span>
+            </a>
+            <a class="dashboard-link-card" href="/memory-lane">
+                <span class="dashboard-link-number">05</span>
+                <span class="dashboard-link-copy"><strong>Memory Lane</strong><span>Revisit past events and shared memories.</span></span>
+                <span class="dashboard-link-action">View memories</span>
+            </a>
+            <a class="dashboard-link-card" href="/notifications">
+                <span class="dashboard-link-number">06</span>
+                <span class="dashboard-link-copy"><strong>Notifications</strong><span>Check updates and requests for your account.</span></span>
+                <span class="dashboard-link-action">View updates</span>
+            </a>
+            <?php if (\AlumniConnect\Security\Auth::hasRole($currentUser, 'admin')): ?>
+                <a class="dashboard-link-card" href="/admin/operations">
+                    <span class="dashboard-link-number">07</span>
+                    <span class="dashboard-link-copy"><strong>Admin operations</strong><span>Review members, photos, and service activity.</span></span>
+                    <span class="dashboard-link-action">Open admin tools</span>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 </section>
