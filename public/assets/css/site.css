@@ -200,6 +200,118 @@ button:focus-visible {
     color: var(--amber);
 }
 
+@media (max-width: 1500px) and (min-width: 1151px) {
+    .site-navigation {
+        gap: 0.85rem;
+    }
+
+    .site-navigation a,
+    .nav-logout-button {
+        font-size: 0.58rem;
+        letter-spacing: 0.055em;
+    }
+
+    .nav-cta {
+        min-height: 2.5rem;
+        gap: 0.45rem;
+        padding: 0 0.55rem;
+    }
+}
+
+@media (max-width: 1150px) {
+    .site-header {
+        min-height: 4.75rem;
+    }
+
+    .menu-toggle {
+        display: none;
+        min-height: 2.75rem;
+        align-items: center;
+        gap: 0.75rem;
+        border: 0;
+        background: transparent;
+        color: var(--paper);
+        cursor: pointer;
+    }
+
+    .js .menu-toggle {
+        display: inline-flex;
+    }
+
+    .menu-toggle-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .menu-toggle-icon {
+        display: flex;
+        width: 1.1rem;
+        flex-direction: column;
+        gap: 0.28rem;
+    }
+
+    .menu-toggle-icon i {
+        display: block;
+        height: 1px;
+        background: var(--paper);
+        transition: transform 180ms ease;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-icon i:first-child {
+        transform: translateY(2px) rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-icon i:last-child {
+        transform: translateY(-3px) rotate(-45deg);
+    }
+
+    .site-navigation {
+        position: absolute;
+        top: 4.75rem;
+        right: 0;
+        left: 0;
+        display: flex;
+        height: auto;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem var(--page-pad) 1.25rem;
+        border-bottom: 1px solid var(--line-dark);
+        background: rgba(18, 20, 21, 0.97);
+    }
+
+    .js .site-navigation {
+        display: none;
+    }
+
+    .js .site-navigation.is-open {
+        display: flex;
+    }
+
+    .site-navigation a:not(.nav-cta) {
+        padding: 0.9rem 0;
+        border-bottom: 1px solid var(--line-dark);
+        font-size: 0.7rem;
+    }
+
+    .site-navigation .nav-logout {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid var(--line-dark);
+    }
+
+    .nav-logout-button {
+        min-height: 2.6rem;
+        font-size: 0.7rem;
+    }
+
+    .nav-cta {
+        align-self: flex-start;
+        margin-top: 1rem;
+    }
+}
+
 .hero {
     position: relative;
     display: flex;
@@ -1272,6 +1384,47 @@ button:focus-visible {
     min-width: 13rem;
 }
 
+.admin-audit-table td.admin-account-controls {
+    min-width: 15rem;
+}
+
+.admin-account-controls form {
+    margin: 0 0 0.55rem;
+}
+
+.admin-account-controls .event-rsvp-button {
+    width: 100%;
+    white-space: normal;
+}
+
+.admin-role-management {
+    margin-top: 0.65rem;
+}
+
+.admin-role-management summary {
+    width: fit-content;
+    color: var(--amber);
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.admin-role-management form {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+}
+
+.admin-role-management select {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    background: #202324;
+    color: var(--paper);
+    font: inherit;
+}
+
 .admin-audit-table td strong,
 .admin-audit-table td span,
 .admin-audit-table td small {
@@ -2111,6 +2264,331 @@ button:focus-visible {
     margin-top: 0.5rem;
 }
 
+.event-community {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-dark);
+}
+
+.event-community-heading h3,
+.event-memory-heading h3 {
+    margin: 0;
+    color: var(--paper);
+    font-size: 0.86rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.event-community-heading p,
+.event-memory-heading p,
+.event-community-empty,
+.event-removed-note {
+    margin: 0.35rem 0 0;
+    color: var(--steel);
+    font-size: 0.72rem;
+    line-height: 1.6;
+}
+
+.event-discussion-form,
+.event-photo-form {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.event-discussion-form label,
+.event-photo-form label {
+    color: var(--paper-muted);
+    font-size: 0.69rem;
+    font-weight: 700;
+}
+
+.event-discussion-form textarea,
+.event-photo-form input[type="text"],
+.event-photo-form input[type="file"] {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    border: 1px solid var(--line-dark);
+    border-radius: 0;
+    background: #17191a;
+    color: var(--paper);
+    font: inherit;
+    font-size: 0.76rem;
+}
+
+.event-discussion-form textarea {
+    resize: vertical;
+}
+
+.event-discussion-form .event-rsvp-button,
+.event-photo-form .event-rsvp-button {
+    justify-self: start;
+}
+
+.event-discussion-list,
+.notification-list {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.event-discussion-item {
+    min-width: 0;
+    padding: 0.8rem;
+    border: 1px solid var(--line-dark);
+    overflow-wrap: anywhere;
+}
+
+.event-discussion-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.4rem 0.8rem;
+    color: var(--steel);
+    font-size: 0.65rem;
+}
+
+.event-discussion-meta strong {
+    color: var(--paper);
+}
+
+.event-discussion-item > p {
+    margin: 0.55rem 0;
+    color: var(--paper-muted);
+    font-size: 0.76rem;
+    line-height: 1.6;
+}
+
+.event-remove-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--amber);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.63rem;
+    text-decoration: underline;
+}
+
+.event-memory-heading {
+    margin-top: 0.5rem;
+}
+
+.event-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+}
+
+.event-photo {
+    min-width: 0;
+    margin: 0;
+    border: 1px solid var(--line-dark);
+    overflow: hidden;
+}
+
+.event-photo img,
+.event-photo-rejected {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: #17191a;
+}
+
+.event-photo-rejected {
+    display: grid;
+    place-items: center;
+    padding: 0.8rem;
+    color: var(--steel);
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+.event-photo figcaption {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.65rem;
+    color: var(--paper-muted);
+    font-size: 0.7rem;
+    overflow-wrap: anywhere;
+}
+
+.event-photo figcaption small {
+    color: var(--steel);
+    line-height: 1.5;
+}
+
+.notification-read-form {
+    max-width: 86rem;
+    margin: 0 auto 1rem;
+    text-align: right;
+}
+
+.notification-list {
+    max-width: 86rem;
+    margin: 0 auto;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--line-dark);
+    background: #202324;
+}
+
+.notification-unread {
+    border-color: var(--amber);
+}
+
+.notification-item p {
+    margin: 0;
+    color: var(--paper);
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+.notification-item time {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--steel);
+    font-size: 0.67rem;
+}
+
+.notification-item .text-link {
+    flex-shrink: 0;
+}
+
+.admin-operations {
+    max-width: 96rem;
+    margin: 0 auto;
+}
+
+.admin-metric-grid,
+.admin-queue-grid,
+.admin-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.8rem;
+    margin: 1.5rem auto 3rem;
+}
+
+.admin-metric,
+.admin-queue-card,
+.admin-photo-card {
+    min-width: 0;
+    border: 1px solid var(--line-dark);
+    background: #202324;
+}
+
+.admin-metric {
+    padding: 1rem;
+}
+
+.admin-metric p,
+.admin-queue-card p,
+.admin-photo-details p {
+    margin: 0 0 0.45rem;
+    color: var(--paper-muted);
+    font-size: 0.75rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+.admin-metric strong {
+    color: var(--amber);
+    font-family: var(--display);
+    font-size: 2rem;
+    letter-spacing: -0.04em;
+}
+
+.admin-queue {
+    margin: 2rem 0;
+}
+
+.admin-queue-heading {
+    margin-bottom: 1rem;
+}
+
+.admin-queue-heading h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+}
+
+.admin-queue-heading p {
+    max-width: 52rem;
+    color: var(--steel);
+    font-size: 0.77rem;
+    line-height: 1.6;
+}
+
+.admin-queue-card {
+    padding: 1rem;
+}
+
+.admin-queue-card h3,
+.admin-photo-details h3 {
+    margin: 0 0 0.6rem;
+    color: var(--paper);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
+.admin-queue-card small,
+.admin-photo-details small {
+    display: block;
+    color: var(--steel);
+    font-size: 0.65rem;
+    line-height: 1.5;
+}
+
+.admin-decision-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.9rem;
+}
+
+.admin-photo-card {
+    overflow: hidden;
+}
+
+.admin-photo-card > img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: #17191a;
+}
+
+.admin-photo-details {
+    padding: 1rem;
+}
+
+.admin-delete-details {
+    margin-top: 0.8rem;
+    color: var(--steel);
+    font-size: 0.68rem;
+}
+
+.admin-delete-details summary {
+    cursor: pointer;
+}
+
+.admin-delete-details form {
+    margin-top: 0.55rem;
+}
+
 .reveal {
     opacity: 1;
     transform: none;
@@ -2139,8 +2617,8 @@ button:focus-visible {
     }
 
     .site-navigation {
-        height: 4.75rem;
-        gap: 1.1rem;
+        height: auto;
+        gap: 0;
     }
 
     .site-navigation a {
@@ -2580,6 +3058,15 @@ button:focus-visible {
     .event-rsvp-actions form,
     .event-rsvp-button {
         width: 100%;
+    }
+
+    .notification-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .event-photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .event-report-grid {

@@ -44,14 +44,20 @@ $flashes = $flashes ?? [];
         <nav class="site-navigation" id="site-navigation" aria-label="Main navigation">
             <a href="<?= $homePrefix ?>#why">Why connect</a>
             <a href="<?= $homePrefix ?>#journey">The journey</a>
-            <a href="<?= $homePrefix ?>#memory-lane">Memory lane</a>
+            <?php if (is_array($currentUser)): ?>
+                <a href="/memory-lane">Memory lane</a>
+            <?php else: ?>
+                <a href="<?= $homePrefix ?>#memory-lane">Memory lane</a>
+            <?php endif; ?>
             <?php if (is_array($currentUser)): ?>
                 <a href="/dashboard">Dashboard</a>
                 <a href="/directory">Directory</a>
                 <a href="/events">Events</a>
                 <a href="/community">Community</a>
+                <a href="/notifications">Notifications</a>
                 <?php if (\AlumniConnect\Security\Auth::hasRole($currentUser, 'admin')): ?>
                     <a href="/admin/users">Account audit</a>
+                    <a href="/admin/operations">Admin operations</a>
                 <?php endif; ?>
                 <a href="/profile">My profile</a>
                 <form class="nav-logout" action="/logout" method="post">

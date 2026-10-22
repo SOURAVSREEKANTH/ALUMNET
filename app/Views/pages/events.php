@@ -157,6 +157,10 @@
                             <a href="/organizer/report?event=<?= \AlumniConnect\Support\View::escape($event['id']) ?>">Attendance report</a>
                         </nav>
                     <?php endif; ?>
+                    <?php
+                    $isMemoryLane = false;
+                    require dirname(__DIR__) . '/partials/event-community.php';
+                    ?>
                 </article>
             <?php endforeach; ?>
         </div>

@@ -1,14 +1,14 @@
 # AlumniConnect — Project Phases Report
 
-**Report date:** 21 October 2026  
-**Reporting scope:** Initial workspace inspection through Phase 7 (work in progress)  
+**Report date:** 22 October 2026
+**Reporting scope:** Initial workspace inspection through Phase 8 and the current Phase 9 administration foundation (Phase 6 camera check outstanding; Phase 7 verified)
 **Project:** AlumniConnect, a PHP and MySQL college alumni-community portal
 
 ## 1. Executive summary
 
-AlumniConnect has progressed from an initial project workspace into a working local web application foundation. Phases 0–5 are complete; Phase 6 implementation is present and awaiting final browser verification; Phase 7 is underway, adding verified-alumni mentorship, opportunity listings, and preference-based meetup suggestions.
+AlumniConnect has progressed from an initial workspace into a working local application foundation. Phases 0–5 are complete; Phase 6 manual attendance is verified, with a supported-device camera scan outstanding; Phase 7 workflows and authorization checks are verified. Phase 8 event discussions, private moderated memory uploads, and in-app notifications are implemented. Phase 9 includes the read-only account audit, alumni verification decisions, photo moderation, and basic operational metrics; broader account/role moderation remains.
 
-The project is currently a **local development prototype**, not a production-ready alumni service. Phase 6 still needs manual-code browser submission, a live camera scan, and responsive checks. Phase 7's implementation and verification are underway. Later community content, notifications, moderation, and full administration remain unimplemented.
+The project is currently a **local development prototype**, not a production-ready alumni service. Live camera scanning depends on a supported browser/device; manual code is verified as a fallback. Account suspension/role management, broad moderation, comprehensive quality review, and deployment readiness remain outstanding. Do not enter real community data until deployment, privacy, backup, and institutional verification requirements are addressed.
 
 ## 2. Project aim and objectives
 
@@ -157,12 +157,14 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 - Disposable local database tests verified pass issuance, hash-only storage, expired/invalid pass rejection, organizer ownership, successful check-in, duplicate rejection, and report calculations.
 - HTTP checks verified protected routes and static script delivery.
 - Browser inspection verified the pass page and QR image render and that organizer check-in UI and manual-entry form display.
-- The integrated browser did not support `BarcodeDetector`, so it displayed the manual-entry fallback. A live camera scan, manual-code submission in the browser, and Phase 6 responsive checks are still outstanding.
+- Initial browser checks found that `BarcodeDetector` was unavailable; manual submission and responsive checks were still outstanding at that point. Follow-up closeout results are recorded below.
 - Disposable test users, event, passes, check-in records, and associated test data were removed after testing. The local database returned to 4 users, 0 events, 0 passes, and 0 check-ins.
+- **Follow-up closeout on 22 October:** a disposable browser event was published, RSVP'd, and issued a 64-character pass. Manual check-in succeeded during the event, a second submission was rejected as already checked in, and the attendance report showed 1 confirmed RSVP, 1 check-in, and a 100% check-in rate. The check-in desk had no horizontal overflow at tested 375px and 1425px viewport widths.
+- The integrated browser did not expose `BarcodeDetector`; the scanner showed the intended manual-entry fallback. Live camera scanning on supported hardware remains the sole device-specific Phase 6 check. Temporary account/event/pass/check-in/audit data were removed, returning the local database to 5 users and zero events, RSVPs, passes, and check-ins.
 
-**Status:** Implementation and repository/database integration checks complete; final browser and responsive verification pending. Phase 6 should remain in progress until those checks are completed.
+**Status:** Core implementation and browser/manual/responsive checks complete; a live camera test on a supported device remains open. Keep Phase 6 in progress until that device-specific check can be performed or manual fallback is explicitly accepted as sufficient.
 
-### Phase 7 — Mentorship, opportunities, and meetup matching (in progress)
+### Phase 7 — Mentorship, opportunities, and meetup matching (verified for current scope)
 
 **Objective:** Help students connect with verified alumni mentors, give authorized members a place to share opportunities, and suggest upcoming events based on preferences members explicitly choose.
 
@@ -176,9 +178,45 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 - Added a combined signed-in Community page and server-side authorization/CSRF-protected POST routes.
 - Added Phase 7 database tables and a repeatable migration. It has been applied twice to the local development database.
 
-**Verification so far:** PHP syntax checks passed for all 44 PHP files and JavaScript syntax checks passed for the 3 checked scripts. The repeatable migration ran twice, all four Phase 7 tables were confirmed in MySQL, and the no-preferences event-match query executed successfully. Repository checks covered verified-mentor eligibility, request transitions, opportunity access/close rules, and meetup filter behavior. The local student browser workflow displayed mentor and opportunity listings, showed date/location matching explanations, and submitted a mentorship request that appeared as pending; the page had no horizontal overflow at the tested 375px and 1425px client widths. Anonymous `GET /community` redirected to `/login` with HTTP 303, and `GET /mentorship/request` was rejected with HTTP 405. Authenticated CSRF/role-denial behavior and mentor-decision/opportunity forms still need browser verification.
+**Verification:** PHP syntax checks passed for all 44 PHP files at initial Phase 7 closeout. The repeatable migration ran twice, all four Phase 7 tables were confirmed in MySQL, and the no-preferences event-match query executed successfully. Repository checks covered verified-mentor eligibility, request transitions, opportunity access/close rules, and meetup filter behavior. Disposable browser workflows exercised mentor-profile enablement, student request submission, mentor acceptance, opportunity publishing, and author closing. Signed-in CSRF failure and insufficient-role publish requests both returned HTTP 403. The Community page had no horizontal overflow at tested 375px and 1425px viewports. Anonymous `/community` redirected to login with HTTP 303, and a GET to a POST-only route returned 405. All Phase 7 fixtures were cleaned up.
 
-**Status:** In progress; core implementation and scoped checks are complete, while authenticated workflow/CSRF/role-denial browser checks remain open.
+**Status:** Complete for the Phase 7 feature scope implemented here; broader production security, institution policy, and deployment checks remain part of the later readiness work.
+
+### Phase 8 — Event discussions, memories, and notifications
+
+**Objective:** Give signed-in members a moderated way to discuss events, share event memories, and receive updates about relevant activity.
+
+**Work completed:**
+
+- Added event discussions with soft deletion and authorization for comment authors, event organizers, and administrators.
+- Added Memory Lane for started events and JPEG/PNG uploads with a 2 MB limit, dimension/pixel bounds, random storage names, private storage outside `public/`, and authenticated image streaming.
+- Kept uploaded images pending moderator approval and restricted pending/rejected image visibility; administrators can approve, reject, or remove photos.
+- Added an in-app notification inbox and ownership-checked read-state updates for discussions, mentorship decisions, alumni-review results, and photo moderation.
+- Added repeatable Phase 8 and Phase 9 database migrations and updated fresh-schema definitions.
+
+**Verification recorded:** Both migrations were applied twice. Repository/MySQL checks verified discussion ownership/soft deletion, per-event query limits, private photo visibility, and notification persistence/read ownership. Browser workflows verified comment rendering/escaping/removal, photo upload, pending/rejected privacy, inbox rendering/read state, and administrator approval/rejection and alumni decisions. Anonymous/insufficient-role access was rejected. Responsive checks found no horizontal overflow at tested mobile and desktop widths. The photo route returned private/no-store, `nosniff`, and restrictive CSP headers. Temporary fixtures were cleaned; the database returned to five users, zero events/photos/notifications, and the unrelated audit row was preserved. Final syntax checks passed for all 58 PHP and 3 JavaScript files.
+
+**Status:** Implemented for the current feature scope. Broader moderation/report workflows, automated regression tests, and full security/accessibility review remain in the later readiness work.
+
+### Phase 9 foundation — Account audit and operations (partial)
+
+**Objective:** Give project administrators a safe way to confirm that user registration and profile data are being persisted without exposing authentication secrets.
+
+**Work completed on 22 October 2026:**
+
+- Added an administrator-only, read-only `/admin/users` page with account search and pagination.
+- The page shows account ID, name, email, assigned roles, active/suspended status, registration time, last sign-in, profile completion, selected professional/education fields, and alumni-verification status.
+- The repository query intentionally does not select password hashes. Plaintext passwords are not stored or recoverable by administrators.
+- Added the page to the navigation for administrators only and documented its route.
+- Granted the local development account `Sourav Sreekanth` the `admin` role while retaining `student`; recorded the change in the local database audit log. This local role assignment is not part of the source commit or GitHub deployment.
+
+**Verification recorded:** All 47 PHP files passed syntax validation. The MySQL account-list and search queries ran, and results did not contain `password_hash`. Browser verification showed an administrator can open the audit page; a signed-in student received HTTP 403; anonymous access redirected to login with HTTP 303. A later responsive check found no horizontal overflow at 375px and 1425px viewport settings, and password hashes were absent from the rendered page. Disposable test accounts were removed, returning the local database to five accounts.
+
+**Additional work completed:** Added an administrator operations page with pending alumni review, photo moderation, basic counts, CSRF-protected decisions/deletion, audit logging, and member notifications. Added CSRF-protected account suspension/reactivation and role grant/removal controls to the account audit. Account management prevents self-suspension/self-role changes, preserves at least one role on each account, and prevents suspending or removing the role from the last active administrator. Granting the alumni role creates a pending alumni profile rather than verifying the account.
+
+**Account-control verification:** A disposable admin/member browser workflow exercised role grant/removal and account suspension/reactivation. The audit page showed the changed account state and kept newly assigned alumni status pending. A state-changing POST without CSRF returned HTTP 403 without changing account state. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role. The account-audit page had no overflow at tested 360px and 1425px viewports; all QA records were removed afterward.
+
+**Status:** Partial administration foundation. Broader report moderation, audit-log review, and comprehensive analytics remain future work.
 
 ## 4. Product status at a glance
 
@@ -188,10 +226,13 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 | Authentication, roles, and local database | Complete for local prototype | Persisted accounts, protected routes, CSRF/session controls |
 | Member profiles and directory | Complete | Editable profiles, privacy controls, search and filters |
 | Events and RSVP/waitlist workflows | Complete | Organizer publishing, capacity management, FIFO waitlist |
-| Attendance passes and reports | Implemented; final checks pending | Hashed event passes, organizer check-in, aggregate metrics |
-| Mentorship, opportunities, and preference-based meetup suggestions | In progress | Community page and database workflows implemented; verification ongoing |
-| Event discussions, memory uploads, and notifications | Not started | Planned for a later phase |
-| Full administrator, moderation, and verification tools | Not started | Planned for a later phase |
+| Attendance passes and reports | Implemented; camera check pending | Manual check-in, duplicate rejection, reports, responsive checks verified |
+| Mentorship, opportunities, and preference-based meetup suggestions | Complete for current phase scope | Browser workflows, CSRF/role denial, and responsive checks recorded |
+| Event discussions, memory uploads, and notifications | Implemented for current scope | Moderated private uploads, discussions, and in-app inbox |
+| Administrator account audit | Implemented; responsive checks verified | Read-only `/admin/users`; no passwords or password hashes exposed |
+| Alumni verification decisions, photo moderation, and basic operational metrics | Implemented for current scope | Admin decisions require CSRF and are audited |
+| Account suspension and role management | Implemented for current scope | CSRF-protected and audited; self/last-admin and final-role safeguards |
+| Broader administration | Not complete | Report moderation, audit-log review, and richer analytics remain |
 | Production deployment and comprehensive quality review | Not complete | Requires later security, accessibility, performance, and deployment work |
 
 ## 5. Current technical product
@@ -205,16 +246,13 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 
 ## 6. Remaining work and recommended next steps
 
-1. Finish Phase 6 browser verification: submit a manual pass code through the organizer form, confirm the success and duplicate-rejection flows in the browser, and check the pages at mobile and desktop widths.
-2. Test camera scanning on a supported browser/device; retain manual entry as the fallback.
-3. Record Phase 6 browser closeout separately; Phase 7 can continue while those checks remain open.
-4. Complete Phase 7 authorization/CSRF HTTP checks and browser review of mentor decisions and opportunity publishing/closing.
-5. Mark Phase 7 complete only after its verification is recorded, then continue with event discussions, memory uploads, and notifications in Phase 8.
-6. Build organizer/admin verification, moderation, and analytics workflows in Phase 9.
-7. Complete the broader integration, security, accessibility, responsiveness, and performance review before production deployment.
+1. Run a live Phase 6 camera scan on supported browser/device hardware if available; manual entry, duplicate rejection, report totals, and responsive behavior are already verified.
+2. Complete Phase 9 with broader report moderation, audit-log review, and richer analytics.
+3. Run broader integration, security, accessibility, responsiveness, reliability, and performance checks; fix findings and record evidence.
+4. Prepare a private pilot deployment with HTTPS, production server configuration, secret management, backups/recovery, monitoring, and institution-approved privacy/verification practices before inviting real users.
 
 ## 7. Overall assessment
 
-AlumniConnect has moved beyond a static concept page: it is a working local prototype with persisted identity, profile discovery, event registration, and an implemented attendance workflow. Its strongest completed foundations are the role-aware access boundaries, privacy controls, transactional event handling, and the separation of RSVP data from actual attendance records.
+AlumniConnect has moved beyond a static concept page: it is a working local prototype with persisted identity, profile discovery, event registration/attendance, community workflows, event discussions, private moderated memories, notifications, account suspension/role controls, and basic administration. Its strongest foundations include role-aware access boundaries, privacy controls, transactional event handling, and the separation of RSVP data from actual attendance records.
 
-The project is **partially complete as a product**: Phases 0–5 are complete, Phase 6 awaits final browser/responsive checks, Phase 7 is in progress, and Phases 8 onward remain planned. It is suitable for continued local development and demonstration of implemented features, but it should not yet be presented as a finished production alumni platform.
+The project is **partially complete as a product**: Phases 0–5 are complete; Phase 6 core workflows are verified but a supported-device camera test remains open; Phase 7 is verified for its implemented scope; Phase 8 is implemented for its current scope; Phase 9 is partially implemented; and comprehensive quality/deployment readiness remain outstanding. It is suitable for continued local development and demonstration, but not public production use.

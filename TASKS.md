@@ -2,8 +2,9 @@
 
 ## Current phase
 
-**Phase 7 — Mentorship, opportunities, and meetup matching**  
-Status: In progress. Phase 7 schema, migration, repository, controller, views, routes, and responsive styles are implemented. Repository and student-browser workflows have been exercised; mentor decision and opportunity publishing/closing browser workflows, plus authenticated CSRF/role-denial HTTP checks, remain open. Phase 6 is implemented but still awaits manual-code browser submission, supported-device camera scanning, and responsive checks.
+**Current focus — Phase 9 closeout and Phase 10 quality review**
+
+Phase 6 manual check-in, duplicate rejection, report totals, and responsive checks are verified; a live camera scan remains device-specific. Phase 7 workflows, CSRF/role denial, and responsive checks are verified. Phase 8 discussions, private moderated memories, and notifications are implemented for current scope. Phase 9 includes the account audit, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics; broader report moderation and audit-log review remain.
 
 ## Roadmap
 
@@ -13,10 +14,10 @@ Status: In progress. Phase 7 schema, migration, repository, controller, views, r
 - [x] Phase 3 — Configure PHP/MySQL, authentication, sessions, role assignment/access boundaries, and reproducible demo accounts.
 - [x] Phase 4 — Implement alumni profiles, directory search, filters, and transparent suggestions.
 - [x] Phase 5 — Implement event publishing, RSVP states, capacity handling, and waitlists.
-- [ ] Phase 6 — Implement QR/manual check-in, attendance records, and attendance metrics; complete live browser/camera and responsive checks.
-- [ ] Phase 7 — Implement verified-alumni mentorship, opportunity listings, and transparent preference-based meetup suggestions.
-- [ ] Phase 8 — Implement event discussions, Memory Lane uploads, and notifications.
-- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics (read-only account audit added; remaining workflows open).
+- [ ] Phase 6 — Implement QR/manual check-in, attendance records, and attendance metrics; manual check-in, duplicate rejection, report totals, and responsive checks now verified; camera scan on supported hardware remains open.
+- [x] Phase 7 — Implement verified-alumni mentorship, opportunity listings, and transparent preference-based meetup suggestions; browser workflows, authorization/CSRF, and responsive checks verified.
+- [x] Phase 8 — Implement event discussions, private moderated Memory Lane uploads, and notifications; browser/database workflows verified for current scope.
+- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics; account audit, suspension/role controls, alumni decisions, photo moderation, and basic operational metrics are implemented, while broader report moderation and audit-log review remain.
 - [ ] Phase 10 — Run integration, security, accessibility, responsiveness, and performance checks.
 - [ ] Phase 11 — Finalize setup and learning documentation, demo workflow, and presentation material.
 
@@ -38,4 +39,4 @@ Status: In progress. Phase 7 schema, migration, repository, controller, views, r
 
 ## Verification notes
 
-Phases 2–7 and their executed checks are recorded in `docs/TESTING.md`. Phase 6 browser checks remain open while Phase 7 proceeds. The current app remains a local development foundation, not the full portal.
+Phases 2–9 checks are recorded in `docs/TESTING.md`; the cumulative status is in `docs/PROJECT_PHASES_REPORT.md`. Phase 6 still needs a supported-device camera scan. Phase 9 is partial; Phase 10 quality review and Phase 11 pilot/deployment preparation remain. The current app remains a local development prototype, not a production-ready portal.

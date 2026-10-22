@@ -2,7 +2,7 @@
 
 ## Status
 
-The identity/authentication, member-profile, event/RSVP, attendance, and Phase 7 mentorship/opportunity/meetup-preference schemas are implemented in `database/schema.sql` and maintained in repeatable migrations. The Phase 4 `member_profiles` table stores profile information for all account types; `alumni_profiles` retains alumni verification state. Repeatable Phase 4–7 migration scripts create their tables without replacing existing member data. Department and graduation-batch records are institution-specific and must be provisioned with real values. Discussion, photo, notification, and moderation-report tables remain design proposals.
+The identity/authentication, member-profile, event/RSVP, attendance, Phase 7 mentorship/opportunity/meetup-preference, and Phase 8 discussion/photo/notification schemas are implemented in `database/schema.sql` and maintained in repeatable migrations. Phase 9 extends notification types for alumni review and photo moderation. The Phase 4 `member_profiles` table stores profile information for all account types; `alumni_profiles` retains alumni verification state. Department and graduation-batch records are institution-specific and must be provisioned with real values. Broader moderation-report tables remain a design proposal.
 
 Use InnoDB, `utf8mb4`, foreign keys, explicit indexes for common filters, and UTC timestamps. The initial SQL uses these conventions. Use integer primary keys unless a feature has a justified public-token requirement. Prefer soft-state fields for moderation and lifecycle history over destructive deletion of records needed for audit.
 
@@ -12,7 +12,7 @@ Use InnoDB, `utf8mb4`, foreign keys, explicit indexes for common filters, and UT
 
 - **`users`** — account identity: unique normalized email, password hash, account status, timestamps, and last-login metadata. Never store a plaintext password.
 - **`roles`** — controlled role catalog: alumni, student, organizer, administrator.
-- **`user_roles`** — many-to-many user/role assignment; unique `(user_id, role_id)`. Role changes require authorization and an audit record.
+- **`user_roles`** — many-to-many user/role assignment; unique `(user_id, role_id)`. Administrator role changes require CSRF, prevent self-change and removal of the last active administrator/last account role, and are audited. Granting the alumni role creates a pending verification profile.
 - **`departments`** — institution department catalog.
 - **`graduation_batches`** — a batch within a department, with graduation year and unique `(department_id, graduation_year)`.
 - **`alumni_profiles`** — alumni verification state and reviewer metadata. Earlier versions also stored profile fields; those values are copied into `member_profiles` during migration and the legacy columns are retained for compatibility. Email verification is not alumni verification.
@@ -33,17 +33,17 @@ Use InnoDB, `utf8mb4`, foreign keys, explicit indexes for common filters, and UT
 - **`mentorship_requests`** — one current request per student/mentor pair with goals and pending/accepted/declined/withdrawn state. Re-request after a declined or withdrawn request reuses the pair row; pending and accepted requests cannot be duplicated.
 - **`opportunities`** — authorized author, type, description, optional location/expiry, and open/closed state. Only open, unexpired records are shown in the community board.
 
-### Community and opportunities
+### Community, memory sharing, and notifications
 
-- **`event_discussions`** — event, author, message, creation/edit/deletion timestamps. Keep deletion/moderation state instead of silently rewriting history where retention rules require it.
-- **`photo_albums`** — event or batch association, owner, title, and moderation state.
-- **`event_photos`** — album, uploader, generated storage key, safe metadata/caption, content type/size, moderation state, and timestamps. The original filename is metadata only, never the storage path.
+- **`event_discussions`** — event, author, message, creation time, and soft-deletion time. Comments are event-scoped and only owners/organizers/administrators may remove them.
+- **`photo_albums`** — one event association and owner per album.
+- **`event_photos`** — album, uploader, generated storage key, MIME type, dimensions, byte size, caption, moderation state, and timestamps. The original filename is not stored; image files are held outside the public document root.
+- **`notifications`** — recipient, optional actor, type, related resource, read timestamp, and creation timestamp. Current types cover event discussions, mentorship, alumni review, and photo moderation.
 
 ### Operations and accountability
 
-- **`notifications`** — recipient, optional actor, type, related resource reference, read timestamp, creation timestamp.
 - **`reports`** — reporter, target resource reference, reason, moderation status, reviewer, and resolution timestamps. Target references need either typed nullable foreign keys with an exactly-one-target constraint or a documented polymorphic strategy with application-level validation; do not assume a free-form ID is a foreign key.
-- **`audit_logs`** — implemented initial actor/action/target/safe-metadata structure; publishing an event records `event.published` in the same transaction. Never record passwords, session IDs, QR secrets, or full authentication tokens.
+- **`audit_logs`** — implemented actor/action/target/safe-metadata structure; event publication/check-in, alumni review, photo moderation, and account status/role changes are recorded. Never record passwords, session IDs, QR secrets, or full authentication tokens.
 
 Do not add a user-connections table unless a real connection workflow is implemented.
 
@@ -51,11 +51,11 @@ Do not add a user-connections table unless a real connection workflow is impleme
 
 1. **RSVP uniqueness:** unique `(event_id, user_id)`; update the existing state instead of inserting duplicate intents.
 2. **Capacity:** capacity-sensitive RSVP transitions run in a transaction while holding a row lock on the event; count only `attending` RSVPs. A `NULL` capacity is unlimited; `interested` does not reserve a place.
-3. **Waitlist promotion:** when an attendee cancels or changes to interested, promote the earliest active-account waitlisted member and update the RSVP and queue states in the same transaction. Notification delivery is not implemented yet.
+3. **Waitlist promotion:** when an attendee cancels or changes to interested, promote the earliest active-account waitlisted member and update the RSVP and queue states in the same transaction. Waitlist promotion notifications are not currently sent.
 4. **Check-in:** the event row is locked in a transaction, and unique `(event_id, user_id)` protects against duplicate QR scans or manual/QR races. Validate active-account, attending RSVP, non-revoked pass, and event-time eligibility server-side. Each successful attendance write is audit logged.
 5. **RSVP vs. check-in:** analytics derive separately from `event_rsvps` and `event_checkins`; never mark an attendee as present merely because they RSVP'd.
 6. **Ownership:** derive organizer and uploader permissions from persisted records; never accept ownership from client-supplied IDs.
-7. **Audit:** event publication and check-in actions are appended to `audit_logs` in the same transaction as the change.
+7. **Audit:** event publication, check-in, alumni review, photo moderation, and account status/role changes are appended to `audit_logs`; transactional actions write their audit record in the same transaction as the change.
 8. **Privacy:** enforce profile, contact, and attendee visibility in query/service logic. Do not expose hidden attendees in counts that identify individuals.
 9. **Deletion/retention:** prefer account deactivation and moderation states when referenced records or audit obligations exist. Define retention and anonymization policy before deployment.
 

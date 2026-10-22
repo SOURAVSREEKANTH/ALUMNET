@@ -8,6 +8,8 @@ use AlumniConnect\Controllers\AuthController;
 use AlumniConnect\Controllers\AdminController;
 use AlumniConnect\Controllers\CommunityController;
 use AlumniConnect\Controllers\EventController;
+use AlumniConnect\Controllers\MemoryController;
+use AlumniConnect\Controllers\NotificationController;
 use AlumniConnect\Controllers\PageController;
 use AlumniConnect\Controllers\ProfileController;
 use AlumniConnect\Support\View;
@@ -28,6 +30,8 @@ $events = new EventController();
 $profiles = new ProfileController();
 $community = new CommunityController();
 $admin = new AdminController();
+$memories = new MemoryController();
+$notifications = new NotificationController();
 $authentication = null;
 $routes = [
     'GET' => [
@@ -37,7 +41,11 @@ $routes = [
         '/directory' => [$profiles, 'directory'],
         '/events' => [$events, 'index'],
         '/community' => [$community, 'index'],
+        '/memory-lane' => [$memories, 'index'],
+        '/memory/photo' => [$memories, 'photo'],
+        '/notifications' => [$notifications, 'index'],
         '/admin/users' => [$admin, 'users'],
+        '/admin/operations' => [$admin, 'operations'],
         '/organizer/check-in' => [$events, 'checkInPage'],
         '/organizer/report' => [$events, 'report'],
         '/login' => [static function () use (&$authentication): void {
@@ -66,6 +74,11 @@ $routes = [
         '/events/create' => [$events, 'publish'],
         '/events/rsvp' => [$events, 'rsvp'],
         '/events/pass' => [$events, 'pass'],
+        '/events/discussion' => [$memories, 'addDiscussion'],
+        '/events/discussion/delete' => [$memories, 'deleteDiscussion'],
+        '/events/photo' => [$memories, 'uploadPhoto'],
+        '/events/photo/delete' => [$memories, 'deletePhoto'],
+        '/notifications/read' => [$notifications, 'markAllRead'],
         '/organizer/check-in' => [$events, 'checkIn'],
         '/community/mentor-profile' => [$community, 'saveMentorProfile'],
         '/mentorship/request' => [$community, 'requestMentorship'],
@@ -73,6 +86,11 @@ $routes = [
         '/opportunities/create' => [$community, 'publishOpportunity'],
         '/opportunities/close' => [$community, 'closeOpportunity'],
         '/community/preferences' => [$community, 'saveEventPreferences'],
+        '/admin/alumni-review' => [$admin, 'reviewAlumnus'],
+        '/admin/photo-review' => [$admin, 'reviewPhoto'],
+        '/admin/photo-delete' => [$admin, 'deletePhoto'],
+        '/admin/account-status' => [$admin, 'setAccountStatus'],
+        '/admin/account-role' => [$admin, 'changeAccountRole'],
     ],
 ];
 

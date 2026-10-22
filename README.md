@@ -2,11 +2,11 @@
 
 **Your college. Your people. Your next chapter.**
 
-AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for a college Web Programming microproject. The public landing page, authentication/database foundation, member profiles and directory, and event publishing/RSVP/waitlist workflows are implemented.
+AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for a college Web Programming microproject. It includes the public landing page, authentication, member profiles and directory, events/attendance, mentorship and opportunities, event discussions, private moderated photo memories, notifications, and a partial administrator operations area.
 
 ## Project status
 
-**Phase 7 is in progress.** The project includes a responsive public landing page, local MySQL schema, registration and login, privacy-controlled member profiles and directory, capacity-aware events/RSVPs, and QR/manual check-in with attendance reports. Phase 7 adds verified-alumni mentorship, opportunity listings, and preference-based event suggestions. Phase 6 still needs final manual-code browser, camera, and responsive checks. See the [project phases report](./docs/PROJECT_PHASES_REPORT.md) for the full history and [TASKS.md](./TASKS.md) for current status.
+**Phase 9 administration is in progress.** In addition to authentication, profiles, events, attendance, mentorship, and opportunities, members can discuss events, upload private JPEG/PNG memories for moderator review, and receive in-app notifications. Administrators can review alumni verification, moderate photos, inspect operational metrics, audit accounts, suspend/reactivate accounts, and manage roles with self/last-admin safeguards. Broader report moderation, audit-log review, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [project phases report](./docs/PROJECT_PHASES_REPORT.md) and [task list](./TASKS.md) for current status.
 
 ## Run locally
 
@@ -117,6 +117,34 @@ $ext = Join-Path (Split-Path $php) "ext"
 $phpArgs = @("-d", "extension_dir=$ext", "-d", "extension=php_pdo_mysql.dll")
 & $php @phpArgs .\database\migrate-phase7.php
 ```
+
+For an existing database created before Phase 8, add event discussions, private photo-memory metadata, and notifications with the local MySQL administrator account:
+
+```powershell
+$env:MYSQL_ADMIN_HOST = "127.0.0.1"
+$env:MYSQL_ADMIN_PORT = "3307"
+$env:MYSQL_ADMIN_USER = "root"
+# Set MYSQL_ADMIN_PASSWORD only if your local database administrator has a password.
+$php = Join-Path $env:LOCALAPPDATA "AlumniConnect\php-8.5.11\php.exe"
+$ext = Join-Path (Split-Path $php) "ext"
+$phpArgs = @("-d", "extension_dir=$ext", "-d", "extension=php_pdo_mysql.dll")
+& $php @phpArgs .\database\migrate-phase8.php
+```
+
+For a database that predates Phase 9 notifications, extend notification types for moderation and alumni-review updates:
+
+```powershell
+$env:MYSQL_ADMIN_HOST = "127.0.0.1"
+$env:MYSQL_ADMIN_PORT = "3307"
+$env:MYSQL_ADMIN_USER = "root"
+# Set MYSQL_ADMIN_PASSWORD only if your local database administrator has a password.
+$php = Join-Path $env:LOCALAPPDATA "AlumniConnect\php-8.5.11\php.exe"
+$ext = Join-Path (Split-Path $php) "ext"
+$phpArgs = @("-d", "extension_dir=$ext", "-d", "extension=php_pdo_mysql.dll")
+& $php @phpArgs .\database\migrate-phase9.php
+```
+
+Uploaded event memories are limited to JPEG/PNG images no larger than 2 MB and are stored under `storage\memories`, outside the public document root. New photos remain private to their uploader and moderators until approved. Keep `storage\memories` excluded from source control and include it in a deliberate, privacy-aware backup policy before any pilot.
 
 The member's event pass displays a locally generated QR code; organizers can scan it with a supported browser/device camera or enter the code manually. `public\assets\js\vendor\qrcode.min.js` is a locally vendored, MIT-licensed QR encoder (license included next to the file). No external service receives pass codes.
 

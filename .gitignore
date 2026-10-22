@@ -4,6 +4,7 @@
 /.env.*
 !/.env.example
 /storage/uploads/*
+/storage/memories/*
 /storage/logs/*
 /storage/cache/*
 /vendor/

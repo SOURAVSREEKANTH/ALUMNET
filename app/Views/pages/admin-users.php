@@ -2,7 +2,7 @@
     <div class="directory-heading">
         <p class="eyebrow"><span class="eyebrow-line"></span> Administrator tools</p>
         <h1 id="admin-audit-title">Account<br><em>audit.</em></h1>
-        <p>Review registered accounts, sign-in activity, and the profile details members have entered. Passwords and password hashes are never displayed.</p>
+        <p>Review registrations, profile details, account status, and assigned roles. Account changes are CSRF-protected and audited. Passwords and password hashes are never displayed.</p>
     </div>
 
     <form class="directory-filters admin-audit-filters" action="/admin/users" method="get">
@@ -38,10 +38,18 @@
                         <th scope="col">Profile details</th>
                         <th scope="col">Registered</th>
                         <th scope="col">Last sign-in</th>
+                        <th scope="col">Account controls</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($accounts as $account): ?>
+                        <?php
+                        $assignedRoleSlugs = array_filter(explode(',', (string) ($account['role_slugs'] ?? '')));
+                        $availableRoles = array_filter(
+                            $roles,
+                            static fn (array $role): bool => !in_array($role['slug'], $assignedRoleSlugs, true)
+                        );
+                        ?>
                         <tr>
                             <td data-label="Member">
                                 <strong><?= \AlumniConnect\Support\View::escape($account['full_name']) ?></strong>
@@ -69,6 +77,47 @@
                             </td>
                             <td data-label="Registered"><?= \AlumniConnect\Support\View::escape($account['created_at']) ?></td>
                             <td data-label="Last sign-in"><?= $account['last_login_at'] === null ? 'Never' : \AlumniConnect\Support\View::escape($account['last_login_at']) ?></td>
+                            <td class="admin-account-controls" data-label="Account controls">
+                                <?php if ((int) $account['id'] === (int) $currentUser['id']): ?>
+                                    <small>Your own account status and roles cannot be changed here.</small>
+                                <?php else: ?>
+                                    <form action="/admin/account-status" method="post">
+                                        <input type="hidden" name="_csrf" value="<?= \AlumniConnect\Support\View::escape(\AlumniConnect\Security\Csrf::token()) ?>">
+                                        <input type="hidden" name="user_id" value="<?= \AlumniConnect\Support\View::escape($account['id']) ?>">
+                                        <button class="event-rsvp-button <?= $account['status'] === 'active' ? 'event-rsvp-secondary' : '' ?>" type="submit" name="status" value="<?= $account['status'] === 'active' ? 'suspended' : 'active' ?>">
+                                            <?= $account['status'] === 'active' ? 'Suspend account' : 'Reactivate account' ?>
+                                        </button>
+                                    </form>
+                                    <details class="admin-role-management">
+                                        <summary>Manage roles</summary>
+                                        <?php if ($availableRoles !== []): ?>
+                                            <form action="/admin/account-role" method="post">
+                                                <input type="hidden" name="_csrf" value="<?= \AlumniConnect\Support\View::escape(\AlumniConnect\Security\Csrf::token()) ?>">
+                                                <input type="hidden" name="user_id" value="<?= \AlumniConnect\Support\View::escape($account['id']) ?>">
+                                                <input type="hidden" name="action" value="grant">
+                                                <label class="visually-hidden" for="grant-role-<?= \AlumniConnect\Support\View::escape($account['id']) ?>">Role to grant</label>
+                                                <select id="grant-role-<?= \AlumniConnect\Support\View::escape($account['id']) ?>" name="role" required>
+                                                    <?php foreach ($availableRoles as $role): ?>
+                                                        <option value="<?= \AlumniConnect\Support\View::escape($role['slug']) ?>"><?= \AlumniConnect\Support\View::escape($role['label']) ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                                <button class="event-rsvp-button" type="submit">Grant role</button>
+                                            </form>
+                                        <?php endif; ?>
+                                        <?php foreach ($roles as $role): ?>
+                                            <?php if (in_array($role['slug'], $assignedRoleSlugs, true)): ?>
+                                                <form action="/admin/account-role" method="post">
+                                                    <input type="hidden" name="_csrf" value="<?= \AlumniConnect\Support\View::escape(\AlumniConnect\Security\Csrf::token()) ?>">
+                                                    <input type="hidden" name="user_id" value="<?= \AlumniConnect\Support\View::escape($account['id']) ?>">
+                                                    <input type="hidden" name="role" value="<?= \AlumniConnect\Support\View::escape($role['slug']) ?>">
+                                                    <input type="hidden" name="action" value="revoke">
+                                                    <button class="event-rsvp-button event-rsvp-secondary" type="submit">Remove <?= \AlumniConnect\Support\View::escape($role['label']) ?></button>
+                                                </form>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </details>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

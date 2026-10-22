@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AlumniConnect\Controllers;
 
 use AlumniConnect\Repositories\EventRepository;
+use AlumniConnect\Repositories\MemoryRepository;
 use AlumniConnect\Security\Auth;
 use AlumniConnect\Security\Csrf;
 use AlumniConnect\Security\Session;
@@ -16,10 +17,12 @@ use InvalidArgumentException;
 final class EventController
 {
     private EventRepository $events;
+    private MemoryRepository $memories;
 
     public function __construct()
     {
         $this->events = new EventRepository();
+        $this->memories = new MemoryRepository();
     }
 
     public function index(): void
@@ -27,11 +30,17 @@ final class EventController
         $user = $this->requireUser();
         $isAdmin = Auth::hasRole($user, 'admin');
         $isOrganizer = $isAdmin || Auth::hasRole($user, 'organizer');
+        $eventList = $this->formatEvents($this->events->upcomingForUser((int) $user['id'], $isAdmin));
 
         View::render('pages/events', [
             'pageTitle' => 'Community events — AlumniConnect',
             'currentUser' => $user,
-            'events' => $this->formatEvents($this->events->upcomingForUser((int) $user['id'], $isAdmin)),
+            'events' => $eventList,
+            'communityByEvent' => $this->memories->communityForEvents(
+                array_column($eventList, 'id'),
+                (int) $user['id'],
+                $isAdmin
+            ),
             'canPublishEvents' => $isOrganizer,
             'isEventOrganizer' => $isOrganizer,
             'formValues' => $this->emptyFormValues(),
@@ -284,10 +293,16 @@ final class EventController
     private function renderEvents(array $user, ?string $formError, array $formValues): void
     {
         $isAdmin = Auth::hasRole($user, 'admin');
+        $eventList = $this->formatEvents($this->events->upcomingForUser((int) $user['id'], $isAdmin));
         View::render('pages/events', [
             'pageTitle' => 'Community events — AlumniConnect',
             'currentUser' => $user,
-            'events' => $this->formatEvents($this->events->upcomingForUser((int) $user['id'], $isAdmin)),
+            'events' => $eventList,
+            'communityByEvent' => $this->memories->communityForEvents(
+                array_column($eventList, 'id'),
+                (int) $user['id'],
+                $isAdmin
+            ),
             'canPublishEvents' => Auth::hasRole($user, 'organizer') || $isAdmin,
             'isEventOrganizer' => Auth::hasRole($user, 'organizer') || $isAdmin,
             'formValues' => $formValues,

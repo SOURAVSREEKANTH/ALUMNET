@@ -2,7 +2,7 @@
 
 ## Current status
 
-The Phase 2 public landing page, Phase 3 authentication/database foundation, Phase 4 profile/directory foundation, Phase 5 event/RSVP workflows, and Phase 6 attendance features are served locally using PHP's built-in development server. PHP 8.5.11 x64 NTS was downloaded from the official PHP for Windows distribution to the current user's local application-data directory. A separate MySQL 8.0.46 instance is bound to loopback on port 3307; the schema and app PDO connection are verified.
+The Phase 2 public landing page through Phase 9 administration foundation are served locally using PHP's built-in development server. PHP 8.5.11 x64 NTS was downloaded from the official PHP for Windows distribution to the current user's local application-data directory. A separate MySQL 8.0.46 instance is bound to loopback on port 3307; the schema and app PDO connection are verified. Phase 6 still needs a live camera scan on a supported device; broader Phase 9 controls and production-readiness checks remain.
 
 Record only checks actually executed:
 
@@ -67,12 +67,14 @@ Record only checks actually executed:
 
 ### Phase 6 attendance checks
 
-- `database/migrate-phase6.php` had already been applied twice; the local app connection confirmed `event_passes` and `event_checkins` exist. The current empty-state counts after QA cleanup are 4 users, 0 events, 0 passes, and 0 check-ins.
+- `database/migrate-phase6.php` had already been applied twice; the local app connection confirmed `event_passes` and `event_checkins` exist. After the follow-up UI fixture cleanup, current counts are 5 users, 0 events, 0 passes, and 0 check-ins.
 - All 40 PHP files passed `php -l`; `node --check` passed for `site.js`, `event-tools.js`, and the bundled `qrcode.min.js`.
 - A disposable local MySQL integration fixture verified pass issuance, SHA-256-only token storage, expiry rejection, organizer ownership, QR check-in, case-insensitive codes, duplicate/invalid pass rejection, and aggregate report counts/rate. The fixture users, event, pass, check-in, and audit row were removed; post-test counts returned to the prior empty event/attendance state.
 - HTTP smoke checks: `GET /events` returned 200; unauthenticated check-in and report requests redirected to `/login`; `GET /events/pass` returned 405 with `Allow: POST`; the event-tools script returned 200 as JavaScript. Responses confirmed `Permissions-Policy: camera=(self)`.
 - Browser workflow logged in as a temporary attendee, opened the event pass, and verified that the locally generated QR image rendered after the CSP was updated to allow `data:` images. The organizer event list showed the check-in/report links, and the check-in page rendered its manual-entry form.
-- The integrated browser did not support `BarcodeDetector`; clicking the scanner control displayed the manual-entry fallback. The manual-entry form rendered, but a manual-code submission, live camera scan, and Phase 6 mobile/responsive screenshots were not verified.
+- Follow-up browser verification used a disposable administrator/event: RSVP succeeded, a 64-character pass was issued, manual check-in succeeded during the event window, and a second submission was rejected as already checked in. The report showed one confirmed RSVP, one actual check-in, and a 100% check-in rate.
+- Check-in page widths matched at the 375px and 1425px viewport settings (360/360 and 1410/1410 CSS client/document widths because of browser chrome). The integrated browser did not support `BarcodeDetector`; the scanner showed the manual-entry fallback. A live camera scan on supported hardware remains unverified.
+- Temporary UI event, RSVP, pass, check-in, audit, and administrator fixtures were removed. Local counts returned to five users and zero events, RSVPs, passes, or check-ins.
 
 ### Phase 7 mentorship, opportunities, and meetup checks
 
@@ -80,15 +82,28 @@ Record only checks actually executed:
 - The Phase 7 repository/MySQL checks verified that verified alumni can offer mentorship and publish opportunities while pending alumni and students cannot; mentors are ranked by shared department/graduating year with the reason shown; duplicate active mentorship requests are rejected; only the assigned mentor can decide; opportunity listings can be closed only by their publisher or an administrator; and meetup suggestions apply saved venue/date filters and explain the matching criteria.
 - A temporary local browser workflow signed in as a student, opened `/community`, displayed the mentor/opportunity listings and venue/date match explanation, sent a mentorship request, and showed the request as pending. The community page's document width matched the client width at 375px mobile and 1425px desktop sizes (no horizontal overflow).
 - Final local checks passed for syntax in all 44 PHP files and all 3 checked JavaScript files. The Phase 7 schema tables were confirmed in MySQL, the no-preferences event-match query executed successfully, an unauthenticated `GET /community` returned `303` to `/login`, and `GET /mentorship/request` returned `405`.
-- Temporary Phase 7 user accounts, event, opportunity, mentorship profile/request, preference, audit, and login-attempt fixtures were deleted. Database counts returned to 4 users and zero events, mentor profiles, mentorship requests, opportunities, and preferences.
-- Mentor decision and opportunity publishing/closing forms, authenticated CSRF rejection and role-denial HTTP behavior, and saved visual screenshots have not yet been verified end to end in the browser. The anonymous redirect and route-method checks above do not substitute for those authenticated checks.
+- Follow-up browser checks with disposable accounts verified mentor-profile enablement, student request submission, mentor acceptance, opportunity publishing, and author closing, with the expected saved states and success messages.
+- Signed-in CSRF rejection and role denial were exercised: a mentorship POST without a token returned 403, and a student opportunity-publish POST with a valid token returned 403. Community widths matched at 375px and 1425px viewport settings (360/360 and 1410/1410 CSS pixels because of browser chrome).
+- Temporary Phase 7 alumni/student profiles, mentorship request, closed opportunity, and associated audit rows were removed. Database counts returned to five users and zero mentor profiles, mentorship requests, opportunities, and preferences.
 
 ### Administrator account audit
 
 - Added a read-only `/admin/users` page restricted to the `admin` role. It displays account identity, roles, account status, registration/last-login timestamps, profile completion, and selected profile fields; the query does not select password hashes.
 - The MySQL audit query ran successfully against the local database, returned five accounts, and confirmed `password_hash` is not included in the result.
 - Browser verification with a disposable admin account showed the account list and confirmed password hashes were not displayed. A signed-in student received HTTP 403 for the route; an unauthenticated request redirected to `/login` with HTTP 303.
-- Both temporary test accounts were removed; the local database returned to five accounts. Responsive-width inspection of this new page still needs to be recorded.
+- Both temporary test accounts were removed; the local database returned to five accounts. Responsive browser widths matched at 375px and 1425px viewport settings (360/360 and 1410/1410 CSS pixels due to browser chrome), with no password hash in rendered text.
+
+### Phase 8 community content and Phase 9 administration checks
+
+- `database/migrate-phase8.php` and `database/migrate-phase9.php` were each applied twice; both migrations completed on repeated runs. Fresh schema definitions and the upgrade migrations include the discussion, photo-album/photo metadata, and notification structures.
+- Repository/MySQL checks verified discussion soft deletion and role/ownership rules, photo visibility by moderation state, event-scoped image access, and notification ownership/read-state behavior.
+- Browser workflows verified discussion rendering/escaping/removal, private JPEG/PNG upload, pending/rejected photo privacy, inbox rendering/read state, and administrator approval/rejection and alumni verification decisions. A student was denied administrator operations with HTTP 403.
+- The photo streaming route returned HTTP 200 for an authorized member and `image/png`, with `Cache-Control: private, no-store`, `X-Content-Type-Options: nosniff`, and `Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox`.
+- Admin operations and Memory Lane had no horizontal overflow at tested 360px mobile and 1425px desktop CSS client widths.
+- Final local cleanup removed only the named Phase 8/9 fixtures. `MemoryUploadService` removed both fixture image files before their related database records were deleted; the named disposable session PNG was also removed. Counts returned to five users, zero events, zero photos, and zero notifications. The pre-existing unrelated audit row was preserved.
+- Account-management browser checks granted and removed an alumni role, suspended and reactivated a disposable account, and confirmed that granting the alumni role creates a `pending` verification profile. A state-changing POST without CSRF returned HTTP 403 and did not alter the account. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role.
+- The account audit had no page-level overflow at a 360px viewport (345/345 CSS client/document widths) or 1425px viewport (1410/1410). QA accounts and their audit entries were removed afterward; database counts returned to five users and one pre-existing audit row.
+- Final syntax checks passed for all 58 PHP files and all 3 JavaScript files.
 
 ## Planned test layers
 

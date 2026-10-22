@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-This document records the design and implementation status for AlumniConnect. The public landing page, identity/authentication foundation, member profile/directory, event/RSVP workflows, and Phase 6 event-pass/check-in/report workflows are implemented. Phase 7 mentorship, opportunity, and meetup-preference workflows are in progress; Phase 6 browser closeout also remains open.
+This document records the design and implementation status for AlumniConnect. Phases 0–8 are implemented for their current scope. Phase 9 now includes a read-only account audit, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics. A supported-device Phase 6 camera scan, broader moderation/audit review, quality review, and deployment readiness remain open.
 
 ## Principles
 
@@ -63,30 +63,30 @@ Controllers translate HTTP input and output; services enforce workflows and tran
 
 ## Route map
 
-The current route table implements the public and authentication routes below; other routes are planned. Mutations use POST; state-changing actions must not use GET.
+The current route table lists implemented routes and a separate set of routes still planned. Mutations use POST; state-changing actions must not use GET.
 
 | Area | Implemented routes | Access |
 |---|---|---|
 | Public/authentication | `GET /`, `GET /login`, `POST /login`, `GET /register`, `POST /register`, `POST /logout` | Public; logout requires a valid session and CSRF token |
 | Personal | `GET /dashboard` | Authenticated |
 | Profiles/discovery | `GET /profile`, `POST /profile`, `GET /directory` | Authenticated; private profiles excluded, email shown only with explicit sharing |
-| Events | `GET /events`, `POST /events/create`, `POST /events/rsvp` | Authenticated; publishing requires organizer/admin, each mutation requires CSRF |
+| Events | `GET /events`, `POST /events/create`, `POST /events/rsvp`, `POST /events/discussion`, `POST /events/discussion/delete` | Authenticated; publishing requires organizer/admin, each mutation requires CSRF |
+| Memories | `GET /memory-lane`, `POST /events/photo`, `POST /events/photo/delete`, `GET /memory/photo?id={id}` | Authenticated; JPEG/PNG uploads are private pending moderation; image access follows uploader/moderator/approval rules |
 | Event passes | `POST /events/pass` | Authenticated confirmed attendee; pass token is private and stored only as a hash |
 | Attendance | `GET /organizer/check-in`, `POST /organizer/check-in`, `GET /organizer/report` | Event organizer or administrator; CSRF required for check-in |
 | Community | `GET /community`, `POST /community/preferences` | Authenticated members; explicit event date/location preferences |
 | Mentorship | `POST /community/mentor-profile`, `POST /mentorship/request`, `POST /mentorship/decision` | Verified alumni opt in; students request; assigned mentors decide |
 | Opportunities | `POST /opportunities/create`, `POST /opportunities/close` | Verified alumni/organizer/admin publish; publisher/admin closes |
+| Personal | `GET /notifications`, `POST /notifications/read` | Authenticated; owner-only in-app inbox and CSRF-protected read state |
+| Administration | `GET /admin/users`, `GET /admin/operations`, `POST /admin/alumni-review`, `POST /admin/photo-review`, `POST /admin/photo-delete`, `POST /admin/account-status`, `POST /admin/account-role` | Administrator only; state changes require CSRF and write audit records |
 
 | Area | Planned routes | Access |
 |---|---|---|
-| Personal | `GET /notifications`, `POST /notifications/{id}/read` | Authenticated |
 | Discovery | `GET /alumni/{id}` | Authenticated; results filtered by privacy and role rules |
-| Events | `GET /events/{id}` | Authenticated; event detail visibility follows event policy |
 | Mentorship | `GET /mentorship`, `POST /mentorship/requests`, `POST /mentorship/requests/{id}/decision` | Authenticated; requester/mentor/admin permissions checked per action |
 | Opportunities | `GET /opportunities`, `GET /opportunities/{id}`, `POST /opportunities` | Browse authenticated; posting requires eligible role |
-| Memories/discussion | `GET /events/{id}/discussion`, `POST /events/{id}/discussion`, `POST /photos` | Authenticated with event, ownership, and moderation checks |
 | Organizer | `GET /organizer/events`, `GET /organizer/events/{id}`, `POST /organizer/events`, `POST /organizer/events/{id}`, `POST /organizer/events/{id}/check-in`, `GET /organizer/events/{id}/report` | Organizer for the event or administrator |
-| Administration | `GET /admin/users`, `POST /admin/users/{id}/roles`, `POST /admin/users/{id}/verification`, `GET /admin/reports`, `POST /admin/reports/{id}/decision`, `GET /admin/analytics` | Administrator |
+| Administration | Audit-log browsing, report/appeal queues, richer analytics | Administrator |
 
 Every protected request must check the authenticated identity and authorization on the server. Resource ownership is checked from persisted data, never trusted from a submitted user ID, role, or organizer ID. Event creation publishes immediately and writes an audit record; RSVP transitions lock the event row, enforce capacity, and promote the earliest active waitlisted member when an attendee releases a seat. Unlimited capacity is represented by `NULL`. Passes contain high-entropy event-scoped secrets; only their SHA-256 hashes are stored. The owning event row is locked for check-in and a unique `(event_id, user_id)` record prevents duplicate scans. Attendee reports show aggregate counts, not attendee identities. Public landing statistics, if later added, must be computed from real records or clearly marked demo data.
 
@@ -98,8 +98,10 @@ Every protected request must check the authenticated identity and authorization 
 4. **Events and RSVP:** event permissions and lifecycle, RSVP uniqueness, transactional capacity enforcement, waitlist promotion.
 5. **Check-in and reports:** event-specific pass generation, hashed pass secret, server validation, unique attendance, audit trail, aggregate metrics.
 6. **Mentorship and exchange:** mentor eligibility, request states, opportunities and expiry/moderation, transparent preference matching.
-7. **Community content:** event discussions, reports, safe photo storage/moderation, notifications.
-8. **Administration and polish:** verification, role management, moderation, audit review, responsive/accessibility/performance test pass.
+7. **Community content (Phase 8):** event discussions, privately stored and moderated photos, and in-app notifications.
+8. **Administration (Phase 9):** account audit, suspension/role controls, alumni verification, photo moderation, and basic operational metrics; broader moderation/audit review remain.
+9. **Quality review (Phase 10):** integration, security, accessibility, responsive, reliability, and performance checks.
+10. **Pilot readiness (Phase 11):** setup/demo documentation and a private deployment plan with HTTPS, secrets, backups, monitoring, and institution-approved privacy/verification policies.
 
 ## Visual system
 
@@ -148,7 +150,7 @@ Prefer college-provided or properly licensed imagery. The current two local edit
 - `database/setup-local.php` provisions a new development database, limited app account, and ignored local config; it refuses to overwrite existing local configuration or database resources.
 - Registration accepts alumni/student roles only, stores password hashes, assigns the chosen role, and leaves alumni verification pending.
 - Login/logout use regenerated server-side sessions, CSRF protection, an idle timeout, escaped views, and HMAC-keyed login/registration throttling.
-- The signed-in interface includes a role-aware dashboard, Phase 4 profile/directory features, Phase 5 event publishing/RSVP workflows, and Phase 6 event passes, check-in, and aggregate reports; broader administrator workflows remain unimplemented.
+- The signed-in interface includes a role-aware dashboard, Phase 4 profile/directory features, Phase 5 event publishing/RSVP workflows, Phase 6 event passes/check-in/reports, Phase 7 community, Phase 8 discussions/memories/notifications, and the current Phase 9 audit/verification/moderation foundation; account role/suspension management and broader administrator workflows remain.
 
 ### Implemented profile and directory foundation
 

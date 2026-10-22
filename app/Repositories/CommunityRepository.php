@@ -167,6 +167,7 @@ final class CommunityRepository
             }
 
             if (is_array($request)) {
+                $requestId = (int) $request['id'];
                 $save = $pdo->prepare(
                     'UPDATE mentorship_requests
                      SET goals = :goals, status = \'pending\', updated_at = UTC_TIMESTAMP()
@@ -187,7 +188,16 @@ final class CommunityRepository
                     'mentor_id' => $mentorId,
                     'goals' => $goals,
                 ]);
+                $requestId = (int) $pdo->lastInsertId();
             }
+            NotificationRepository::create(
+                $pdo,
+                $mentorId,
+                $requesterId,
+                'mentorship_request',
+                'mentorship',
+                $requestId
+            );
             $pdo->commit();
         } catch (Throwable $exception) {
             if ($pdo->inTransaction()) {
@@ -237,7 +247,7 @@ final class CommunityRepository
         $pdo->beginTransaction();
         try {
             $request = $pdo->prepare(
-                'SELECT id, status
+                'SELECT id, requester_user_id, status
                  FROM mentorship_requests
                  WHERE id = :request_id AND mentor_user_id = :mentor_id
                  FOR UPDATE'
@@ -261,6 +271,14 @@ final class CommunityRepository
                 'request_id' => $requestId,
                 'mentor_id' => $mentorId,
             ]);
+            NotificationRepository::create(
+                $pdo,
+                (int) $existing['requester_user_id'],
+                $mentorId,
+                'mentorship_' . $decision,
+                'mentorship',
+                $requestId
+            );
             $pdo->commit();
         } catch (Throwable $exception) {
             if ($pdo->inTransaction()) {
