@@ -46,6 +46,7 @@ $routes = [
         '/notifications' => [$notifications, 'index'],
         '/admin/users' => [$admin, 'users'],
         '/admin/operations' => [$admin, 'operations'],
+        '/admin/audit' => [$admin, 'auditLog'],
         '/organizer/check-in' => [$events, 'checkInPage'],
         '/organizer/report' => [$events, 'report'],
         '/login' => [static function () use (&$authentication): void {

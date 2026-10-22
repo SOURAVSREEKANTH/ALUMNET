@@ -4,7 +4,7 @@
 
 **Current focus — Phase 9 closeout and Phase 10 quality review**
 
-Phase 6 manual check-in, duplicate rejection, report totals, and responsive checks are verified; a live camera scan remains device-specific. Phase 7 workflows, CSRF/role denial, and responsive checks are verified. Phase 8 discussions, private moderated memories, and notifications are implemented for current scope. Phase 9 includes the account audit, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics; broader report moderation and audit-log review remain.
+Phase 6 manual check-in, duplicate rejection, report totals, and responsive checks are verified; a live camera scan remains device-specific. Phase 7 workflows, CSRF/role denial, and responsive checks are verified. Phase 8 discussions, private moderated memories, and notifications are implemented for current scope. Phase 9 includes the account audit/log, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics; broader content-report moderation remains.
 
 ## Roadmap
 
@@ -17,7 +17,7 @@ Phase 6 manual check-in, duplicate rejection, report totals, and responsive chec
 - [ ] Phase 6 — Implement QR/manual check-in, attendance records, and attendance metrics; manual check-in, duplicate rejection, report totals, and responsive checks now verified; camera scan on supported hardware remains open.
 - [x] Phase 7 — Implement verified-alumni mentorship, opportunity listings, and transparent preference-based meetup suggestions; browser workflows, authorization/CSRF, and responsive checks verified.
 - [x] Phase 8 — Implement event discussions, private moderated Memory Lane uploads, and notifications; browser/database workflows verified for current scope.
-- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics; account audit, suspension/role controls, alumni decisions, photo moderation, and basic operational metrics are implemented, while broader report moderation and audit-log review remain.
+- [ ] Phase 9 — Implement organizer/admin workflows, alumni verification, moderation, and analytics; account audit/log, suspension/role controls, alumni decisions, photo moderation, and basic operational metrics are implemented, while broader content-report moderation remains.
 - [ ] Phase 10 — Run integration, security, accessibility, responsiveness, and performance checks.
 - [ ] Phase 11 — Finalize setup and learning documentation, demo workflow, and presentation material.
 

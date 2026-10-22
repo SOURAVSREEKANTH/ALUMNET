@@ -58,6 +58,7 @@ $flashes = $flashes ?? [];
                 <?php if (\AlumniConnect\Security\Auth::hasRole($currentUser, 'admin')): ?>
                     <a href="/admin/users">Account audit</a>
                     <a href="/admin/operations">Admin operations</a>
+                    <a href="/admin/audit">Audit log</a>
                 <?php endif; ?>
                 <a href="/profile">My profile</a>
                 <form class="nav-logout" action="/logout" method="post">

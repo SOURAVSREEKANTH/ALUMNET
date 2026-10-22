@@ -6,7 +6,7 @@ AlumniConnect is a PHP and MySQL alumni-network and meetup-tracking project for 
 
 ## Project status
 
-**Phase 9 administration is in progress.** In addition to authentication, profiles, events, attendance, mentorship, and opportunities, members can discuss events, upload private JPEG/PNG memories for moderator review, and receive in-app notifications. Administrators can review alumni verification, moderate photos, inspect operational metrics, audit accounts, suspend/reactivate accounts, and manage roles with self/last-admin safeguards. Broader report moderation, audit-log review, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [project phases report](./docs/PROJECT_PHASES_REPORT.md) and [task list](./TASKS.md) for current status.
+**Phase 9 administration is in progress.** In addition to authentication, profiles, events, attendance, mentorship, and opportunities, members can discuss events, upload private JPEG/PNG memories for moderator review, and receive in-app notifications. Administrators can review alumni verification, moderate photos, inspect operational metrics, audit accounts and actions, suspend/reactivate accounts, and manage roles with self/last-admin safeguards. Broader content-report moderation, quality checks, and deployment work remain. This is still a local-development prototype, not a production-hosted service. See the [project phases report](./docs/PROJECT_PHASES_REPORT.md) and [task list](./TASKS.md) for current status.
 
 ## Run locally
 

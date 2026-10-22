@@ -6,7 +6,7 @@ AlumniConnect is a web-based alumni community portal for a college. It is intend
 
 The project is being developed as a PHP and MySQL college web-programming project. Its public-facing experience introduces the community, while its authenticated area provides the foundation for member accounts and role-aware features. Development is being completed in phases so that the database, access rules, and core workflows can be checked before adding larger features.
 
-**Current implementation status:** The responsive public landing page, authentication/database foundation, profile editor, privacy-aware member directory, event publishing/RSVP/waitlist workflows, and Phase 6 attendance flows are implemented. A supported-device camera scan is still unverified. Phase 7 workflows are verified for current scope. Phase 8 event discussions, private memory uploads, and in-app notifications are implemented. Phase 9 now includes account audit, account suspension/reactivation, role management, alumni verification decisions, photo moderation, and basic operational metrics; broader report moderation and audit-log review remain. The application is a local-development prototype, not a production-hosted service.
+**Current implementation status:** The responsive public landing page, authentication/database foundation, profile editor, privacy-aware member directory, event publishing/RSVP/waitlist workflows, and Phase 6 attendance flows are implemented. A supported-device camera scan is still unverified. Phase 7 workflows are verified for current scope. Phase 8 event discussions, private memory uploads, and in-app notifications are implemented. Phase 9 now includes account audit/log review, account suspension/reactivation, role management, alumni verification decisions, photo moderation, and basic operational metrics; broader content-report moderation remains. The application is a local-development prototype, not a production-hosted service.
 
 ## 2. Problem statement
 
@@ -103,10 +103,11 @@ The database contains these four role types. Public registration currently permi
 
 ### Phase 9 administration (partial)
 
-- `/admin/users` provides a read-only account audit without selecting or rendering password hashes.
+- `/admin/users` provides a read-only account audit without selecting or rendering password hashes; administrators can suspend/reactivate accounts and grant/revoke roles.
+- `/admin/audit` provides a paginated action log without exposing raw metadata. Role/status actions are CSRF-protected, audited, and guard against self-lockout and removal of the last active administrator.
 - `/admin/operations` supports alumni verification decisions, photo moderation, and basic operational metrics. State changes require CSRF and are recorded in `audit_logs`.
 - Alumni verification must follow institution-approved evidence and policy; profile visibility or email ownership alone is not graduation proof.
-- Broader report moderation and audit-log review remain unimplemented.
+- Broader content-report moderation and richer analytics remain unimplemented.
 
 ### Local development setup
 
@@ -122,7 +123,7 @@ The following items remain on the product roadmap:
 - Skill/interest tagging and additional profile facets.
 - Public, anonymous profile pages; the current directory requires sign-in.
 - Opportunity review/moderation and richer mentorship lifecycle features.
-- Account suspension/role management, broader report moderation, and audit-log review.
+- Content-report moderation and richer analytics.
 - Broader integration, accessibility, security, and performance testing.
 
 See [TASKS.md](../TASKS.md) for phase-by-phase progress.
@@ -175,6 +176,7 @@ The current request path is:
 | GET | `/directory` | Search/filter visible profiles; requires sign-in |
 | GET | `/admin/users` | Search and review registered accounts; administrator only |
 | GET | `/admin/operations` | Review alumni verification and photos; view operational metrics; administrator only |
+| GET | `/admin/audit` | Review recent audited actions without sensitive metadata; administrator only |
 | GET | `/events` | Browse upcoming published events; requires sign-in |
 | POST | `/events/create` | Publish an event; organizer/admin and CSRF checks required |
 | POST | `/events/rsvp` | Attend, express interest, join waitlist, or cancel; requires sign-in and CSRF |
@@ -203,7 +205,7 @@ The current request path is:
 | POST | `/admin/account-status` | Suspend or reactivate an account; administrator and CSRF checks required |
 | POST | `/admin/account-role` | Grant or revoke an account role; administrator and CSRF checks required |
 
-Account controls prevent self-suspension/self-role changes, preserve at least one role per account, and block suspending or removing the role from the last active administrator. Granting the alumni role creates a pending alumni profile; it does not mark the person verified. Broader report moderation and audit-log review are not implemented yet.
+Account controls prevent self-suspension/self-role changes, preserve at least one role per account, and block suspending or removing the role from the last active administrator. Granting the alumni role creates a pending alumni profile; it does not mark the person verified. The audit view omits metadata to avoid exposing sensitive values. Broader report moderation remains unimplemented.
 
 ## 8. Database and data storage
 
@@ -267,7 +269,7 @@ Important limits:
 - The demo database is local and has no production backup, monitoring, or recovery procedure.
 - Event publication is organizer/admin-only, and event publishing and RSVP forms have CSRF protection. Event edit/cancel controls and attendee notifications have not been implemented.
 - Memory uploads reject non-JPEG/PNG content and oversize/oversized-dimension images, use random storage keys, remain outside the web root, and are served through an authenticated `nosniff` route with a restrictive CSP.
-- Broader content/report moderation and audit-log review are still required before a public pilot.
+- Broader content/report moderation is still required before a public pilot.
 
 ## 10. Running and testing
 
@@ -287,4 +289,4 @@ The implemented foundation has been checked with PHP syntax validation, JavaScri
 
 ## 11. Summary
 
-AlumniConnect is currently a working local prototype: it supports database-backed accounts, privacy-aware profiles and directory, events/RSVPs/attendance, mentorship/opportunities, event discussions, moderated private photo memories, notifications, account suspension/role controls, alumni verification decisions, a read-only account audit, and basic operational metrics. The built-in server and MySQL remain local; a supported-device camera test, broader moderation/audit review, comprehensive quality review, deployment, backups, monitoring, and institutional policy decisions remain before a real-user pilot.
+AlumniConnect is currently a working local prototype: it supports database-backed accounts, privacy-aware profiles and directory, events/RSVPs/attendance, mentorship/opportunities, event discussions, moderated private photo memories, notifications, account suspension/role controls, alumni verification decisions, a read-only account audit/log, and basic operational metrics. The built-in server and MySQL remain local; a supported-device camera test, broader content moderation, comprehensive quality review, deployment, backups, monitoring, and institutional policy decisions remain before a real-user pilot.

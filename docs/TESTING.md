@@ -103,6 +103,7 @@ Record only checks actually executed:
 - Final local cleanup removed only the named Phase 8/9 fixtures. `MemoryUploadService` removed both fixture image files before their related database records were deleted; the named disposable session PNG was also removed. Counts returned to five users, zero events, zero photos, and zero notifications. The pre-existing unrelated audit row was preserved.
 - Account-management browser checks granted and removed an alumni role, suspended and reactivated a disposable account, and confirmed that granting the alumni role creates a `pending` verification profile. A state-changing POST without CSRF returned HTTP 403 and did not alter the account. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role.
 - The account audit had no page-level overflow at a 360px viewport (345/345 CSS client/document widths) or 1425px viewport (1410/1410). QA accounts and their audit entries were removed afterward; database counts returned to five users and one pre-existing audit row.
+- The new administrator audit log returned HTTP 200, rendered the existing recorded action, and omitted raw audit metadata.
 - Final syntax checks passed for all 58 PHP files and all 3 JavaScript files.
 
 ## Planned test layers

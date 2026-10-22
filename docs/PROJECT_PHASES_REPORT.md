@@ -212,11 +212,11 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 
 **Verification recorded:** All 47 PHP files passed syntax validation. The MySQL account-list and search queries ran, and results did not contain `password_hash`. Browser verification showed an administrator can open the audit page; a signed-in student received HTTP 403; anonymous access redirected to login with HTTP 303. A later responsive check found no horizontal overflow at 375px and 1425px viewport settings, and password hashes were absent from the rendered page. Disposable test accounts were removed, returning the local database to five accounts.
 
-**Additional work completed:** Added an administrator operations page with pending alumni review, photo moderation, basic counts, CSRF-protected decisions/deletion, audit logging, and member notifications. Added CSRF-protected account suspension/reactivation and role grant/removal controls to the account audit. Account management prevents self-suspension/self-role changes, preserves at least one role on each account, and prevents suspending or removing the role from the last active administrator. Granting the alumni role creates a pending alumni profile rather than verifying the account.
+**Additional work completed:** Added an administrator operations page with pending alumni review, photo moderation, basic counts, CSRF-protected decisions/deletion, audit logging, and member notifications. Added CSRF-protected account suspension/reactivation and role grant/removal controls to the account audit. Account management prevents self-suspension/self-role changes, preserves at least one role on each account, and prevents suspending or removing the role from the last active administrator. Granting the alumni role creates a pending alumni profile rather than verifying the account. Added a read-only audit-log page that omits raw metadata.
 
-**Account-control verification:** A disposable admin/member browser workflow exercised role grant/removal and account suspension/reactivation. The audit page showed the changed account state and kept newly assigned alumni status pending. A state-changing POST without CSRF returned HTTP 403 without changing account state. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role. The account-audit page had no overflow at tested 360px and 1425px viewports; all QA records were removed afterward.
+**Account-control verification:** A disposable admin/member browser workflow exercised role grant/removal and account suspension/reactivation. The audit page showed the changed account state and kept newly assigned alumni status pending. A state-changing POST without CSRF returned HTTP 403 without changing account state. Direct repository checks rejected self-suspension, self-role changes, and removal of an account's final role. The account-audit page had no overflow at tested 360px and 1425px viewports. The read-only audit-log route returned HTTP 200 and omitted raw metadata. All QA records were removed afterward.
 
-**Status:** Partial administration foundation. Broader report moderation, audit-log review, and comprehensive analytics remain future work.
+**Status:** Partial administration foundation. Content-report moderation and richer analytics remain future work.
 
 ## 4. Product status at a glance
 
@@ -232,7 +232,7 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 | Administrator account audit | Implemented; responsive checks verified | Read-only `/admin/users`; no passwords or password hashes exposed |
 | Alumni verification decisions, photo moderation, and basic operational metrics | Implemented for current scope | Admin decisions require CSRF and are audited |
 | Account suspension and role management | Implemented for current scope | CSRF-protected and audited; self/last-admin and final-role safeguards |
-| Broader administration | Not complete | Report moderation, audit-log review, and richer analytics remain |
+| Broader administration | Not complete | Content-report moderation and richer analytics remain |
 | Production deployment and comprehensive quality review | Not complete | Requires later security, accessibility, performance, and deployment work |
 
 ## 5. Current technical product
@@ -247,12 +247,12 @@ Build a secure, privacy-aware web portal that helps a college’s students and a
 ## 6. Remaining work and recommended next steps
 
 1. Run a live Phase 6 camera scan on supported browser/device hardware if available; manual entry, duplicate rejection, report totals, and responsive behavior are already verified.
-2. Complete Phase 9 with broader report moderation, audit-log review, and richer analytics.
+2. Complete Phase 9 with content-report moderation and richer analytics.
 3. Run broader integration, security, accessibility, responsiveness, reliability, and performance checks; fix findings and record evidence.
 4. Prepare a private pilot deployment with HTTPS, production server configuration, secret management, backups/recovery, monitoring, and institution-approved privacy/verification practices before inviting real users.
 
 ## 7. Overall assessment
 
-AlumniConnect has moved beyond a static concept page: it is a working local prototype with persisted identity, profile discovery, event registration/attendance, community workflows, event discussions, private moderated memories, notifications, account suspension/role controls, and basic administration. Its strongest foundations include role-aware access boundaries, privacy controls, transactional event handling, and the separation of RSVP data from actual attendance records.
+AlumniConnect has moved beyond a static concept page: it is a working local prototype with persisted identity, profile discovery, event registration/attendance, community workflows, event discussions, private moderated memories, notifications, account suspension/role controls, audit-log review, and basic administration. Its strongest foundations include role-aware access boundaries, privacy controls, transactional event handling, and the separation of RSVP data from actual attendance records.
 
 The project is **partially complete as a product**: Phases 0–5 are complete; Phase 6 core workflows are verified but a supported-device camera test remains open; Phase 7 is verified for its implemented scope; Phase 8 is implemented for its current scope; Phase 9 is partially implemented; and comprehensive quality/deployment readiness remain outstanding. It is suitable for continued local development and demonstration, but not public production use.

@@ -66,6 +66,26 @@ final class AdminController
         ]);
     }
 
+    public function auditLog(): void
+    {
+        $user = $this->requireAdmin();
+        $page = filter_var($_GET['page'] ?? '1', FILTER_VALIDATE_INT);
+        if (!is_int($page) || $page < 1 || $page > 10000) {
+            View::error(422, 'Invalid audit page', 'Choose a valid page from the audit log.');
+            return;
+        }
+
+        $results = $this->admin->auditEntries($page);
+        View::render('pages/admin-audit-log', [
+            'pageTitle' => 'Audit log — AlumniConnect',
+            'currentUser' => $user,
+            'entries' => $results['entries'],
+            'totalEntries' => $results['total'],
+            'page' => $results['page'],
+            'pageCount' => $results['page_count'],
+        ]);
+    }
+
     public function setAccountStatus(): void
     {
         $user = $this->requireAdmin();

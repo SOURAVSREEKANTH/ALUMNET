@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-This document records the design and implementation status for AlumniConnect. Phases 0–8 are implemented for their current scope. Phase 9 now includes a read-only account audit, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics. A supported-device Phase 6 camera scan, broader moderation/audit review, quality review, and deployment readiness remain open.
+This document records the design and implementation status for AlumniConnect. Phases 0–8 are implemented for their current scope. Phase 9 now includes read-only account/audit pages, account suspension/role controls, alumni verification decisions, photo moderation, and basic operational metrics. A supported-device Phase 6 camera scan, broader content moderation, quality review, and deployment readiness remain open.
 
 ## Principles
 
@@ -78,7 +78,7 @@ The current route table lists implemented routes and a separate set of routes st
 | Mentorship | `POST /community/mentor-profile`, `POST /mentorship/request`, `POST /mentorship/decision` | Verified alumni opt in; students request; assigned mentors decide |
 | Opportunities | `POST /opportunities/create`, `POST /opportunities/close` | Verified alumni/organizer/admin publish; publisher/admin closes |
 | Personal | `GET /notifications`, `POST /notifications/read` | Authenticated; owner-only in-app inbox and CSRF-protected read state |
-| Administration | `GET /admin/users`, `GET /admin/operations`, `POST /admin/alumni-review`, `POST /admin/photo-review`, `POST /admin/photo-delete`, `POST /admin/account-status`, `POST /admin/account-role` | Administrator only; state changes require CSRF and write audit records |
+| Administration | `GET /admin/users`, `GET /admin/operations`, `GET /admin/audit`, `POST /admin/alumni-review`, `POST /admin/photo-review`, `POST /admin/photo-delete`, `POST /admin/account-status`, `POST /admin/account-role` | Administrator only; state changes require CSRF and write audit records |
 
 | Area | Planned routes | Access |
 |---|---|---|
@@ -86,7 +86,7 @@ The current route table lists implemented routes and a separate set of routes st
 | Mentorship | `GET /mentorship`, `POST /mentorship/requests`, `POST /mentorship/requests/{id}/decision` | Authenticated; requester/mentor/admin permissions checked per action |
 | Opportunities | `GET /opportunities`, `GET /opportunities/{id}`, `POST /opportunities` | Browse authenticated; posting requires eligible role |
 | Organizer | `GET /organizer/events`, `GET /organizer/events/{id}`, `POST /organizer/events`, `POST /organizer/events/{id}`, `POST /organizer/events/{id}/check-in`, `GET /organizer/events/{id}/report` | Organizer for the event or administrator |
-| Administration | Audit-log browsing, report/appeal queues, richer analytics | Administrator |
+| Administration | Report/appeal queues, richer analytics | Administrator |
 
 Every protected request must check the authenticated identity and authorization on the server. Resource ownership is checked from persisted data, never trusted from a submitted user ID, role, or organizer ID. Event creation publishes immediately and writes an audit record; RSVP transitions lock the event row, enforce capacity, and promote the earliest active waitlisted member when an attendee releases a seat. Unlimited capacity is represented by `NULL`. Passes contain high-entropy event-scoped secrets; only their SHA-256 hashes are stored. The owning event row is locked for check-in and a unique `(event_id, user_id)` record prevents duplicate scans. Attendee reports show aggregate counts, not attendee identities. Public landing statistics, if later added, must be computed from real records or clearly marked demo data.
 
@@ -99,7 +99,7 @@ Every protected request must check the authenticated identity and authorization 
 5. **Check-in and reports:** event-specific pass generation, hashed pass secret, server validation, unique attendance, audit trail, aggregate metrics.
 6. **Mentorship and exchange:** mentor eligibility, request states, opportunities and expiry/moderation, transparent preference matching.
 7. **Community content (Phase 8):** event discussions, privately stored and moderated photos, and in-app notifications.
-8. **Administration (Phase 9):** account audit, suspension/role controls, alumni verification, photo moderation, and basic operational metrics; broader moderation/audit review remain.
+8. **Administration (Phase 9):** account/audit review, suspension/role controls, alumni verification, photo moderation, and basic operational metrics; broader content moderation remains.
 9. **Quality review (Phase 10):** integration, security, accessibility, responsive, reliability, and performance checks.
 10. **Pilot readiness (Phase 11):** setup/demo documentation and a private deployment plan with HTTPS, secrets, backups, monitoring, and institution-approved privacy/verification policies.
 

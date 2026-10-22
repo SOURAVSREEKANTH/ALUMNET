@@ -221,6 +221,40 @@ final class AdminRepository
         )->fetchAll();
     }
 
+    public function auditEntries(int $page): array
+    {
+        $pdo = Connection::get();
+        $total = (int) $pdo->query('SELECT COUNT(*) FROM audit_logs')->fetchColumn();
+        $perPage = 50;
+        $pageCount = max(1, (int) ceil($total / $perPage));
+        $page = min(max(1, $page), $pageCount);
+
+        $statement = $pdo->prepare(
+            'SELECT
+                audit.id,
+                audit.action,
+                audit.target_type,
+                audit.target_id,
+                audit.created_at,
+                audit.actor_user_id,
+                actor.full_name AS actor_name
+             FROM audit_logs audit
+             LEFT JOIN users actor ON actor.id = audit.actor_user_id
+             ORDER BY audit.created_at DESC, audit.id DESC
+             LIMIT :result_limit OFFSET :result_offset'
+        );
+        $statement->bindValue(':result_limit', $perPage, PDO::PARAM_INT);
+        $statement->bindValue(':result_offset', ($page - 1) * $perPage, PDO::PARAM_INT);
+        $statement->execute();
+
+        return [
+            'entries' => $statement->fetchAll(),
+            'total' => $total,
+            'page' => $page,
+            'page_count' => $pageCount,
+        ];
+    }
+
     public function setAccountStatus(int $adminId, int $userId, string $status): void
     {
         if (!in_array($status, ['active', 'suspended'], true)) {
